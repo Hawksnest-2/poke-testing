@@ -26,7 +26,6 @@ body{
   height:100vh;
   overflow:auto;
 }
-
 .card-container{
   flex:1;
   display:flex;
@@ -40,7 +39,7 @@ body{
 #pokemon-card,
 #start-screen{
   max-width:100%;
-  max-height:40vh;
+  max-height:45vh;
   object-fit:contain;
   box-shadow:0 15px 50px rgba(0,0,0,.8);
 }
@@ -123,8 +122,9 @@ body{
 
 #binder-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-  gap:10px;
+  grid-template-columns:
+      repeat(auto-fill,minmax(90px,1fr));
+  gap:6px;
 }
 
 .binder-card{
@@ -140,13 +140,9 @@ body{
   border-radius:6px;
 }
 
-.missing{
-  filter:grayscale(100%);
-  opacity:.45;
-}
 
 .small{
-  font-size:.75rem;
+  font-size:.65rem;
 }
 
 #pdf-view-screen{
@@ -248,21 +244,6 @@ body{
   </div>
 </div>
 
-<div id="pdf-view-screen">
-
-<iframe class="pdf-frame"
-   src="./30th_Celebration/Card_List_30th_Celebration.pdf">
- </iframe>  
-
-  <div class="button-row">
-      <button class="download-btn"
-              onclick="closePdfViewer()">
-          ⬅ Back
-      </button>
-  </div>
-
-</div>
-
 <div id="footer-navigation"
      class="button-row">
 
@@ -271,10 +252,30 @@ body{
       📚 My Collection
   </button>
 
-  <button class="download-btn"
-          onclick="openPdfViewer()">
-      📄 Card List
-  </button>
+</div>
+
+<div id="card-modal"
+     style="
+       display:none;
+       position:fixed;
+       inset:0;
+       background:rgba(0,0,0,.95);
+       z-index:9999;
+       justify-content:center;
+       align-items:center;
+       flex-direction:column;">
+
+    <img id="modal-card-image"
+         style="
+           max-width:95%;
+           max-height:80vh;
+           object-fit:contain;">
+
+    <button class="download-btn"
+            onclick="closeCardModal()"
+            style="margin-top:15px;">
+        Close
+    </button>
 
 </div>
 
@@ -455,20 +456,37 @@ function buildBinder(){
         div.className =
           "binder-card";
 
-        div.innerHTML=`
+        div.innerHTML = `
           <img
-          class="${owned ? "" : "missing"}"
-          src="./${FOLDER}/${file}">
+            src="${
+               owned
+                ? './' + FOLDER + '/' + file
+                : './' + FOLDER + '/card-back.png'
+            }">
+          
           <div class="small">
             #${card.cardNumber}
           </div>
+          
           <div class="small">
             ${card.name}
           </div>
+          
           <div class="small">
             ${getRarityBadge(card.rarity)}
           </div>
-        `;
+          `;
+          
+          if(owned){
+          
+             div.style.cursor = "pointer";
+          
+             div.onclick = function(){
+          
+                openCardModal(i);
+          
+             };
+          }
 
         grid.appendChild(div);
     }
@@ -497,6 +515,29 @@ function viewCollection(){
     document.getElementById(
       "binder-screen"
     ).style.display="block";
+}
+
+function openCardModal(cardId){
+
+    let file =
+      String(cardId)
+      .padStart(4,"0")
+      + ".png";
+
+    document.getElementById(
+      "modal-card-image"
+    ).src = "./" + FOLDER + "/" + file;
+
+    document.getElementById(
+      "card-modal"
+    ).style.display = "flex";
+}
+
+function closeCardModal(){
+
+    document.getElementById(
+      "card-modal"
+    ).style.display = "none";
 }
 
 function closeBinder(){
@@ -529,69 +570,54 @@ function resetCollection(){
     }
 }
 
-function openPdfViewer(){
 
-    document.getElementById(
-      "card-wrapper"
-    ).style.display="none";
-
-    document.getElementById(
-      "footer-navigation"
-    ).style.display="none";
-
-    document.getElementById(
-      "pdf-view-screen"
-    ).style.display="flex";
-}
-
-function closePdfViewer(){
-
-    document.getElementById(
-      "pdf-view-screen"
-    ).style.display="none";
-
-    document.getElementById(
-      "card-wrapper"
-    ).style.display="flex";
-
-    document.getElementById(
-      "footer-navigation"
-    ).style.display="flex";
-}
 function launchHugeCelebration(){
+
     const container =
       document.getElementById(
         "card-wrapper"
       );
+
     for(let i=0;i<40;i++){
+
         const s =
           document.createElement("div");
+
         s.className="sparkle";
+
         s.style.background =
           ["#ffd700",
            "#00f0ff",
            "#ff007f",
            "#ffffff"]
            [Math.floor(Math.random()*4)];
+
         s.style.width="10px";
         s.style.height="10px";
         s.style.borderRadius="50%";
+
         s.style.left="50%";
         s.style.top="50%";
+
         s.style.setProperty(
           "--dx",
           (Math.random()*400-200)+"px"
         );
+
         s.style.setProperty(
           "--dy",
           (Math.random()*400-200)+"px"
         );
+
         container.appendChild(s);
+
         setTimeout(()=>{
             s.remove();
         },1500);
     }
 }
+
 </script>
+
 </body>
 </html>
