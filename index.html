@@ -202,7 +202,10 @@ body{
 
 <div id="card-wrapper" class="card-container">
 
-  ./30th_Celebration/Start_30th_Celebration.jpg">
+<img id="start-screen"
+  src="./30th_Celebration/Start_30th_Celebration.jpg"
+  alt="Start Celebration Engine"
+  onclick="drawRandomCard()">
 
   <div id="loading-status" class="loader">
     <h2>⚡ Catching...</h2>
@@ -247,8 +250,9 @@ body{
 
 <div id="pdf-view-screen">
 
-  ./30th_Celebration/Card_List_30th_Celebration.pdf
-  </iframe>
+<iframe class="pdf-frame"
+   src="./30th_Celebration/Card_List_30th_Celebration.pdf">
+ </iframe>  
 
   <div class="button-row">
       <button class="download-btn"
@@ -554,54 +558,40 @@ function closePdfViewer(){
       "footer-navigation"
     ).style.display="flex";
 }
-
 function launchHugeCelebration(){
-
     const container =
       document.getElementById(
         "card-wrapper"
       );
-
     for(let i=0;i<40;i++){
-
         const s =
           document.createElement("div");
-
         s.className="sparkle";
-
         s.style.background =
           ["#ffd700",
            "#00f0ff",
            "#ff007f",
            "#ffffff"]
            [Math.floor(Math.random()*4)];
-
         s.style.width="10px";
         s.style.height="10px";
         s.style.borderRadius="50%";
-
         s.style.left="50%";
         s.style.top="50%";
-
         s.style.setProperty(
           "--dx",
           (Math.random()*400-200)+"px"
         );
-
         s.style.setProperty(
           "--dy",
           (Math.random()*400-200)+"px"
         );
-
         container.appendChild(s);
-
         setTimeout(()=>{
             s.remove();
         },1500);
     }
 }
-
 </script>
-
 </body>
 </html>
