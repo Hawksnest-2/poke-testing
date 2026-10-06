@@ -132,6 +132,43 @@ body{
 
 /* Binder */
 
+#binder-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#000;
+  padding:10px 12px;
+
+  border-bottom:1px solid rgba(255,255,255,.15);
+}
+
+#binder-header h2{
+  margin:0;
+  font-size:1.2rem;
+}
+
+#binder-counter{
+font-weight:bold;
+color:#ddd;
+font-size:.95rem;
+}
+
+#binder-summary{
+  position:sticky;
+  top:65px;
+
+  background:#000;
+
+  text-align:center;
+
+  padding:8px;
+
+  z-index:999;
+}
+
 #binder-screen{
   display:none;
   flex:1;
@@ -236,32 +273,30 @@ body{
       <div id="card-rarity"></div>
       <div id="collection-status"></div>
   </div>
-
 </div>
 
 <div id="binder-screen">
-
-  <h2 style="text-align:center;">
-      My Collection
-  </h2>
-
-  <div id="binder-summary"
-       style="text-align:center;margin-bottom:15px;">
+  <div id="binder-header">
+      <button class="download-btn"
+              onclick="closeBinder()">
+          ⬅ Back
+      </button>
+      <h2>My Collection</h2>
+      <div id="binder-counter">
+          0/196
+      </div>
   </div>
 
   <div id="binder-grid"></div>
 
   <div class="button-row">
       <button class="download-btn"
-              onclick="closeBinder()">
-          ⬅ Back
-      </button>
-      <button class="download-btn"
               onclick="resetCollection()">
-          Reset Collection
+          ⚠️ Reset Collection
       </button>
   </div>
 </div>
+
 
 <div id="footer-navigation"
      class="button-row">
@@ -456,15 +491,14 @@ function buildBinder(){
              };
           }
         grid.appendChild(div);
-    }
-    document.getElementById(
-      "binder-summary"
-    ).innerHTML =
-      `${collection.length} / ${TOTAL_CARDS}
-      Collected (${(
-      collection.length/TOTAL_CARDS*100
-      ).toFixed(1)}%)`;
-}
+            }
+        document.getElementById(
+          "binder-counter"
+        ).textContent =
+          collection.length +
+          "/" +
+          TOTAL_CARDS;
+        }
 
 function viewCollection(){
     buildBinder();
@@ -511,10 +545,11 @@ function closeBinder(){
 }
 
 function resetCollection(){
-    if(
-      confirm(
-        "Reset your entire collection?"
-      )
+    if (
+     confirm(
+       "⚠️ This will erase your entire collection.\n\nContinue?"
+     )
+   )
     ){
         localStorage.removeItem(
             "pokemonCollection"
