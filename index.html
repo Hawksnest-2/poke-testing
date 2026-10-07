@@ -371,8 +371,21 @@ function getRarityBadge(rarity){
 }
 
 function drawRandomCard(){
+
+    const audio =
+      document.getElementById(
+        "catch-sound"
+      );
+
+    audio.currentTime = 0;
+
+    audio.play().catch(err =>
+      console.log("Audio:", err)
+    );
+
     let randomId =
         Math.floor(Math.random() * TOTAL_CARDS) + 1;
+
     let fileName =
         String(randomId)
           .padStart(4,'0') + ".png";
@@ -439,12 +452,6 @@ cardImg.classList.add("fade-in");
         + TOTAL_CARDS
         +" Collected";
       launchHugeCelebration();
-      let audio =
-        document.getElementById(
-            "catch-sound"
-        );
-      audio.currentTime=0;
-      audio.play().catch(()=>{});
     };
 }
 
