@@ -53,7 +53,7 @@ body{
   display:flex;
   justify-content:center;
   z-index:1000;
-  pinter-events: none;
+  pointer-events: none;
 }
 
 #footer-navigation .download-btn{
@@ -545,15 +545,17 @@ function closeBinder(){
 }
 
 function resetCollection(){
+
     if (
-     confirm(
-       "⚠️ This will erase your entire collection.\n\nContinue?"
-     )
-   )
+        confirm(
+            "⚠️ This will erase your entire collection.\n\nContinue?"
+        )
     ){
+
         localStorage.removeItem(
             "pokemonCollection"
         );
+
         buildBinder();
     }
 }
