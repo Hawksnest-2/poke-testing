@@ -1,0 +1,49 @@
+.my-collections-button {
+  background: #222;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin: 20px auto;
+  display: block;
+  font-size: 1.2rem;
+}
+
+.my-collections {
+  padding: 20px;
+}
+
+.my-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.mc-tile {
+  background: #1a1a1a;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid #333;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mc-tile:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+}
+
+.mc-logo {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.mc-progress {
+  margin-top: 10px;
+  color: #ccc;
+  font-size: 0.9rem;
+}

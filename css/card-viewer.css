@@ -1,0 +1,83 @@
+.hidden {
+  display: none;
+}
+
+.card-viewer {
+  padding: 20px;
+}
+
+.back-button {
+  background: #222;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 20px;
+}
+
+.card-tile {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card-tile:hover {
+  transform: translateY(-4px);
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.card-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-modal-content {
+  background: #222;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+}
+
+.card-modal-content img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.catch-button {
+  background: #0078ff;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin: 10px 0 20px 0;
+  font-size: 1.1rem;
+  transition: background 0.2s ease;
+}
+
+.catch-button:hover {
+  background: #3399ff;
+}
