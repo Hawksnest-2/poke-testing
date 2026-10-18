@@ -124,7 +124,7 @@ function renderCollectionSelector() {
 
     const img = document.createElement("img");
     img.className = "collection-logo";
-    img.src = `/poke-testing/collections/${col.id}/${col.logo}`;
+    img.src = `/poke-testing/assets/logos/${col.logo}`;
 
     const name = document.createElement("span");
     name.className = "collection-name";
@@ -340,7 +340,7 @@ function renderMyCollectionsPage() {
 
       const img = document.createElement("img");
       img.className = "mc-logo";
-      img.src = `/poke-testing/collections/${col.id}/${col.logo}`;
+      img.src = `/poke-testing/assets/logos/${col.logo}`;
 
       const name = document.createElement("div");
       name.textContent = col.name;
