@@ -185,3 +185,22 @@
 .collection-selector.hidden {
   pointer-events: none;
 }
+
+.reset-button {
+  background: #8b0000;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+
+  /* Center below grid */
+  display: block;
+  margin: 20px auto 0 auto;
+  width: fit-content;
+}
+
+.reset-button:hover {
+  background: #a30000;
+}
