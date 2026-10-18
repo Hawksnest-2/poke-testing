@@ -1,7 +1,4 @@
-.hidden {
-  display: none;
-}
-
+/* css/card-viewer.css */
 .card-viewer {
   padding: 20px;
   max-width: 1200px;
@@ -112,23 +109,6 @@
 .card-modal-content img {
   width: 100%;
   border-radius: 8px;
-}
-
-/* CATCH BUTTON (if reused anywhere) */
-.catch-button {
-  background: #0078ff;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  margin: 10px 0 20px 0;
-  font-size: 1.1rem;
-  transition: background 0.2s ease;
-}
-
-.catch-button:hover {
-  background: #3399ff;
 }
 
 /* Ensure selector does not steal clicks when hidden */
