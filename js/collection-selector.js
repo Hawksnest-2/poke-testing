@@ -208,7 +208,7 @@ async function enterCollectionOverview(collectionId) {
   };
 
   currentCollectionData.forEach(card => {
-    const key = `${collectionId}:${card.id}`;
+    const key = `${collectionId}:${card.cardNumber}`;
     const isOwned = ownedCards.get(key) === true;
 
     if (isOwned) ownedCount++;
@@ -254,7 +254,7 @@ function renderCardViewer() {
   cardGrid.innerHTML = "";
 
   currentCollectionData.forEach(card => {
-    const key = `${currentCollectionId}:${card.id}`;
+    const key = `${currentCollectionId}:${card.cardNumber}`;
     const isOwned = ownedCards.get(key) === true;
 
     const tile = document.createElement("div");
@@ -275,7 +275,7 @@ function renderCardViewer() {
 
     const num = document.createElement("div");
     num.className = "card-number";
-    num.textContent = `#${String(card.id).padStart(3, "0")}`;
+    num.textContent = `#${String(card.cardNumber).padStart(3, "0")}`;
 
     const name = document.createElement("div");
     name.className = "card-name";
@@ -302,9 +302,8 @@ function renderCardViewer() {
 
 /* MODAL */
 function openCardModal(card, isOwned) {
-  // Track which card is currently open (needed for swipe navigation)
+  // Track which card is currently open
   currentModalCard = card;
-
   // Determine correct image (front if owned, back if not)
   const imgSrc = isOwned
     ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
@@ -327,7 +326,6 @@ document.getElementById("modal-rarity-text").textContent = card.rarity;
   } else {
     content.classList.add("rarity-rare");
   }
-
 
   // Show modal
   cardModal.classList.remove("hidden");
@@ -355,7 +353,7 @@ function resetCurrentCollection() {
   }
 
   currentCollectionData.forEach(card => {
-    const key = `${currentCollectionId}:${card.id}`;
+    const key = `${currentCollectionId}:${card.cardNumber}`;
     ownedCards.delete(key);
     saveOwnedCards();
   });
@@ -370,7 +368,7 @@ function catchRandomPokemon() {
 
   // Find all unowned cards
   const unowned = currentCollectionData.filter(card => {
-    const key = `${currentCollectionId}:${card.id}`;
+    const key = `${currentCollectionId}:${card.cardNumber}`;
     return ownedCards.get(key) !== true;
   });
 
@@ -432,7 +430,7 @@ async function renderMyCollectionsPage() {
     // Count owned cards instantly
     let ownedCount = 0;
     for (const card of data) {
-      const key = `${col.id}:${card.id}`;
+      const key = `${col.id}:${card.cardNumber}`;
       if (ownedCards.get(key) === true) ownedCount++;
     }
 
