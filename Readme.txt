@@ -20,6 +20,8 @@
 ├── /js
 │   ├── manifest.js
 │   └── collection-selector.js
+│   └── rarity.js
+│
 │
 └── /collections
     ├── 01_Scarlet_Violet/
