@@ -28,7 +28,7 @@ body {
 
 .subtitle {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 30px;
   font-size: 1.4rem;
   color: #ccc;
 }
@@ -88,9 +88,17 @@ body {
 
 .overview-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 4rem;
   margin: 20px 0 10px 0;
 }
+
+.overview-logo {
+  width: 200px;
+  height: auto;
+  display: block;
+  margin: 10px auto 20px auto;
+}
+
 
 .my-collection-button {
   background: #222;
@@ -106,8 +114,8 @@ body {
   font-size: 1.6rem;
 }
 
-/*Collection Binder Icon */
-.binder-icon {
+/*Pokedex Icon */
+.pokedex-icon {
     width: 32px;
     height: auto;
 }
@@ -180,7 +188,7 @@ body {
 
 /* SMALL ICON FOR BACK BUTTONS */
 .pc-icon-small {
-  width: 24px;
+  width: 72px;
   height: auto;
   margin-right: 8px;
   vertical-align: middle;
