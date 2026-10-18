@@ -41,6 +41,7 @@
   border-radius: 8px;
 }
 
+/* ⭐ MODAL OVERLAY */
 .card-modal {
   position: fixed;
   top: 0;
@@ -51,16 +52,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 99999; /* raised */
+  pointer-events: auto; /* ⭐ intercept clicks */
 }
 
+.card-modal.hidden {
+  display: none;
+  pointer-events: none; /* ⭐ allow clicks behind when hidden */
+}
+
+/* ⭐ MODAL CONTENT */
 .card-modal-content {
   background: #222;
   padding: 20px;
   border-radius: 12px;
   text-align: center;
   width: 300px;
-  z-index: 10000; 
+  z-index: 100000; 
   position: relative; 
 }
 
@@ -69,6 +77,7 @@
   border-radius: 8px;
 }
 
+/* ⭐ CATCH BUTTON */
 .catch-button {
   background: #0078ff;
   color: #fff;
@@ -83,4 +92,13 @@
 
 .catch-button:hover {
   background: #3399ff;
+}
+
+/* ⭐ ENSURE SELECTOR DOES NOT STEAL CLICKS WHEN HIDDEN */
+.collection-selector {
+  pointer-events: auto;
+}
+
+.collection-selector.hidden {
+  pointer-events: none;
 }
