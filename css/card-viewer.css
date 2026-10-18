@@ -123,10 +123,12 @@
   width: 100%;
   height: 100%;          /* fill entire screen */
   border-radius: 0;      /* fullscreen look */
-  padding: 0;            /* no padding */
+  padding: ;            /* no padding */
+  padding-top: 20px;
   text-align: center;
   position: relative;
   overflow-y: auto;
+  overflow: hidden;
 
   /* rarity border */
   border: 4px solid transparent;
@@ -154,16 +156,18 @@
   color: #fff;
   font-size: 1.8rem;
   cursor: pointer;
+  z-index: 100000;
 }
 
-/* CARD IMAGE — PINCH ZOOM ENABLED */
 /* CARD IMAGE — MAX SIZE */
 .card-modal-content img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: auto;
   max-height: 85vh;      /* keep it inside screen */
   object-fit: contain;   /* scale nicely */
-  margin-top: 40px;      /* space below close button */
+  margin-top: 60px;      /* space below close button */
   touch-action: none;
   transform-origin: center center;
 }
@@ -183,6 +187,10 @@
 /* Ensure selector does not steal clicks when hidden */
 .collection-selector {
   pointer-events: auto;
+}
+
+.hidden {
+  pointer-events: none;
 }
 
 .collection-selector.hidden {
