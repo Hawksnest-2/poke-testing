@@ -6,9 +6,22 @@ body {
   padding: 0;
 }
 
+/* MAIN TITLE WITH LOGOS */
+.main-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.pc-logo {
+  width: 60px;
+  height: auto;
+}
+
 .title {
   text-align: center;
-  margin-top: 30px;
   font-size: 2.4rem;
   letter-spacing: 1px;
 }
@@ -20,6 +33,7 @@ body {
   color: #ccc;
 }
 
+/* COLLECTION SELECTOR GRID */
 .collection-selector {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -58,4 +72,96 @@ body {
   font-weight: 600;
   color: #f0f0f0;
   margin-top: 6px;
+}
+
+/* COLLECTION OVERVIEW PAGE */
+.collection-overview {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.overview-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0 10px 0;
+}
+
+.my-collection-button {
+  background: #222;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto 20px auto;
+  font-size: 1.1rem;
+}
+
+.catch-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.catch-image {
+  width: 80px;
+  height: auto;
+  cursor: pointer;
+}
+
+/* OVERVIEW PROGRESS + RARITY */
+.overview-progress {
+  margin-top: 10px;
+}
+
+.overview-progress p {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.rarity-row {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.rarity-icon {
+  font-size: 1.2rem;
+}
+
+.rarity-label {
+  font-size: 0.95rem;
+}
+
+.rarity-bar {
+  background: #333;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 10px;
+}
+
+.rarity-fill {
+  background: #0078ff;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.rarity-text {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+/* SMALL ICON FOR BACK BUTTONS */
+.pc-icon-small {
+  width: 24px;
+  height: auto;
+  margin-right: 8px;
+  vertical-align: middle;
 }
