@@ -1,3 +1,4 @@
+/* css/collection-selector.css */
 body {
   background: #0f0f0f;
   color: #f0f0f0;
@@ -177,4 +178,9 @@ body {
   margin: 20px auto;
   display: block;
   font-size: 1.2rem;
+}
+
+/* hidden helper */
+.hidden {
+  display: none;
 }
