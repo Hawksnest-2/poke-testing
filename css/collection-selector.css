@@ -10,16 +10,16 @@ body {
 /* MAIN TITLE WITH LOGOS */
 .main-title {
   display: flex;
-  justify-content: center;
+  flex-direction: column;   /* was: row */
   align-items: center;
-  gap: 20px;
-  margin-top: 30px;
+  gap: 8px;
 }
 
 .pc-logo {
-  width: 60px;
+  width: 120px;   /* replace with 2× your current value */
   height: auto;
 }
+
 
 .title {
   text-align: center;
