@@ -120,3 +120,25 @@
 .collection-selector.hidden {
   pointer-events: none;
 }
+
+.card-info {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.card-number {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.card-name {
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.card-rarity {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
