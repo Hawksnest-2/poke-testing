@@ -379,7 +379,7 @@ function catchRandomPokemon() {
 
   // Pick a random unowned card
   const randomCard = unowned[Math.floor(Math.random() * unowned.length)];
-  const key = `${currentCollectionId}:${randomCard.id}`;
+  const key = `${currentCollectionId}:${randomCard.cardNumber}`;
 
   // Mark it owned
   ownedCards.set(key, true);
