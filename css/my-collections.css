@@ -56,3 +56,9 @@
   display: inline-flex;
   align-items: center;
 }
+
+.pokedex-icon {
+  width: 32px;
+  height: auto;
+}
+
