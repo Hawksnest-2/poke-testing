@@ -1,239 +1,343 @@
 import { collections } from "./manifest.js";
+import { rarityConfig } from "./rarity.js"; // assumes rarityConfig.common.icon etc.
 
-/* -------------------------------------------------------
-   OWNERSHIP STORAGE
-------------------------------------------------------- */
+/*
+  rarityConfig example expectation:
+  {
+    common: { icon: "●" },
+    uncommon: { icon: "◆" },
+    rare: { icon: "★" },
+    ultra: { icon: "⬟" }
+  }
+*/
 
-function getOwnedCards() {
-  return JSON.parse(localStorage.getItem("ownedCards") || "{}");
+const mainHeader = document.getElementById("main-header");
+const collectionSelector = document.getElementById("collection-selector");
+const collectionOverview = document.getElementById("collection-overview");
+const cardViewer = document.getElementById("card-viewer");
+const myCollectionsPage = document.getElementById("my-collections");
+const cardModal = document.getElementById("card-modal");
+
+const overviewTitle = document.getElementById("overview-title");
+const overviewTotal = document.getElementById("overview-total");
+
+const rarityCommonIcon = document.getElementById("rarity-common-icon");
+const rarityUncommonIcon = document.getElementById("rarity-uncommon-icon");
+const rarityRareIcon = document.getElementById("rarity-rare-icon");
+const rarityUltraIcon = document.getElementById("rarity-ultra-icon");
+
+const rarityCommonFill = document.getElementById("rarity-common-fill");
+const rarityUncommonFill = document.getElementById("rarity-uncommon-fill");
+const rarityRareFill = document.getElementById("rarity-rare-fill");
+const rarityUltraFill = document.getElementById("rarity-ultra-fill");
+
+const rarityCommonText = document.getElementById("rarity-common-text");
+const rarityUncommonText = document.getElementById("rarity-uncommon-text");
+const rarityRareText = document.getElementById("rarity-rare-text");
+const rarityUltraText = document.getElementById("rarity-ultra-text");
+
+const collectionTitle = document.getElementById("collection-title");
+const cardGrid = document.getElementById("card-grid");
+
+const modalImage = document.getElementById("modal-image");
+const modalName = document.getElementById("modal-name");
+const modalRarity = document.getElementById("modal-rarity");
+const modalClose = document.getElementById("modal-close");
+
+const myCollectionsButtonHome = document.getElementById("my-collections-button");
+const overviewBackButton = document.getElementById("overview-back-button");
+const overviewMyCollectionButton = document.getElementById("overview-my-collection-button");
+const viewerBackButton = document.getElementById("viewer-back-button");
+const viewerMyCollectionButton = document.getElementById("viewer-my-collection-button");
+const mcBackButton = document.getElementById("mc-back-button");
+
+const catchOpenImageOverview = document.getElementById("catch-open-image");
+const catchClosedImageOverview = document.getElementById("catch-closed-image");
+const catchOpenImageViewer = document.getElementById("viewer-catch-open-image");
+const catchClosedImageViewer = document.getElementById("viewer-catch-closed-image");
+
+const myCollectionsGrid = document.getElementById("my-collections-grid");
+
+let currentCollectionId = null;
+let currentCollectionData = null;
+
+// Simple owned state store (you may already have something similar)
+const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
+
+function showScreen(screen) {
+  mainHeader.classList.add("hidden");
+  collectionSelector.classList.add("hidden");
+  collectionOverview.classList.add("hidden");
+  cardViewer.classList.add("hidden");
+  myCollectionsPage.classList.add("hidden");
+
+  switch (screen) {
+    case "home":
+      mainHeader.classList.remove("hidden");
+      collectionSelector.classList.remove("hidden");
+      break;
+    case "overview":
+      collectionOverview.classList.remove("hidden");
+      break;
+    case "viewer":
+      cardViewer.classList.remove("hidden");
+      break;
+    case "myCollections":
+      myCollectionsPage.classList.remove("hidden");
+      break;
+  }
 }
 
-function saveOwnedCards(data) {
-  localStorage.setItem("ownedCards", JSON.stringify(data));
+function loadCollectionData(collectionId) {
+  return import(`../collections/${collectionId}/cardData.js`)
+    .then(module => module.default || module.cards || module.cardData);
 }
-
-/* -------------------------------------------------------
-   COLLECTION SELECTOR
-------------------------------------------------------- */
 
 function renderCollectionSelector() {
-  const container = document.getElementById("collection-selector");
+  collectionSelector.innerHTML = "";
 
   collections.forEach(col => {
     const tile = document.createElement("div");
     tile.className = "collection-tile";
 
-    tile.innerHTML = `
-      <img src="/poke-testing/assets/logos/${col.logo}" class="collection-logo" />
-      <span class="collection-name">${col.name}</span>
-    `;
+    const img = document.createElement("img");
+    img.className = "collection-logo";
+    img.src = `/poke-testing/collections/${col.id}/${col.logo}`;
 
-    tile.onclick = () => enterCollection(col.id, col.name);
+    const name = document.createElement("span");
+    name.className = "collection-name";
+    name.textContent = col.name;
 
-    container.appendChild(tile);
+    tile.appendChild(img);
+    tile.appendChild(name);
+
+    tile.addEventListener("click", () => enterCollectionOverview(col.id));
+
+    collectionSelector.appendChild(tile);
   });
 }
 
-/* -------------------------------------------------------
-   ENTER COLLECTION → LOAD CARD VIEWER
-------------------------------------------------------- */
+async function enterCollectionOverview(collectionId) {
+  currentCollectionId = collectionId;
+  currentCollectionData = await loadCollectionData(collectionId);
 
-window.collectionSizes = {}; // Track total cards per collection
+  showScreen("overview");
 
-async function enterCollection(id, name) {
-  const selector = document.getElementById("collection-selector");
-  const viewer = document.getElementById("card-viewer");
-  const mc = document.getElementById("my-collections");
-  const title = document.getElementById("collection-title");
+  const collectionMeta = collections.find(c => c.id === collectionId);
+  overviewTitle.textContent = collectionMeta ? collectionMeta.name : collectionId;
 
-  selector.classList.add("hidden");
-  mc.classList.add("hidden");
-  viewer.classList.remove("hidden");
+  const totalCards = currentCollectionData.length;
+  let ownedCount = 0;
 
-  title.textContent = name;
+  const rarityCounts = {
+    common: { owned: 0, total: 0 },
+    uncommon: { owned: 0, total: 0 },
+    rare: { owned: 0, total: 0 },
+    ultra: { owned: 0, total: 0 }
+  };
 
-  // ⭐ ABSOLUTE PATH FIX
-  const { cardData } = await import(`/poke-testing/collections/${id}/cardData.js`);
+  currentCollectionData.forEach(card => {
+    const key = `${collectionId}:${card.id}`;
+    const isOwned = ownedCards.get(key) === true;
 
-  window.currentCollection = { id, name, cardData };
-  window.collectionSizes[id] = cardData.length;
+    if (isOwned) ownedCount++;
 
-  renderCards(cardData, id);
+    const rarityKey = (card.rarity || "").toLowerCase();
+    if (rarityKey.includes("common") && !rarityKey.includes("uncommon")) {
+      rarityCounts.common.total++;
+      if (isOwned) rarityCounts.common.owned++;
+    } else if (rarityKey.includes("uncommon")) {
+      rarityCounts.uncommon.total++;
+      if (isOwned) rarityCounts.uncommon.owned++;
+    } else if (rarityKey.includes("rare") && !rarityKey.includes("ultra")) {
+      rarityCounts.rare.total++;
+      if (isOwned) rarityCounts.rare.owned++;
+    } else if (rarityKey.includes("ultra")) {
+      rarityCounts.ultra.total++;
+      if (isOwned) rarityCounts.ultra.owned++;
+    }
+  });
+
+  overviewTotal.textContent = `Owned: ${ownedCount} / ${totalCards} cards`;
+
+  rarityCommonIcon.textContent = rarityConfig.common.icon;
+  rarityUncommonIcon.textContent = rarityConfig.uncommon.icon;
+  rarityRareIcon.textContent = rarityConfig.rare.icon;
+  rarityUltraIcon.textContent = rarityConfig.ultra.icon;
+
+  function setRarityRow(counts, fillEl, textEl) {
+    const { owned, total } = counts;
+    const pct = total > 0 ? Math.round((owned / total) * 100) : 0;
+    fillEl.style.width = `${pct}%`;
+    textEl.textContent = `${owned} / ${total}`;
+  }
+
+  setRarityRow(rarityCounts.common, rarityCommonFill, rarityCommonText);
+  setRarityRow(rarityCounts.uncommon, rarityUncommonFill, rarityUncommonText);
+  setRarityRow(rarityCounts.rare, rarityRareFill, rarityRareText);
+  setRarityRow(rarityCounts.ultra, rarityUltraFill, rarityUltraText);
 }
 
-/* -------------------------------------------------------
-   CARD VIEWER GRID
-------------------------------------------------------- */
+function renderCardViewer() {
+  if (!currentCollectionData || !currentCollectionId) return;
 
-function renderCards(cards, collectionId) {
-  const grid = document.getElementById("card-grid");
-  grid.innerHTML = "";
+  showScreen("viewer");
 
-  const owned = getOwnedCards();
+  const collectionMeta = collections.find(c => c.id === currentCollectionId);
+  collectionTitle.textContent = collectionMeta ? collectionMeta.name : currentCollectionId;
 
-  cards.forEach(card => {
+  cardGrid.innerHTML = "";
+
+  currentCollectionData.forEach(card => {
+    const key = `${currentCollectionId}:${card.id}`;
+    const isOwned = ownedCards.get(key) === true;
+
     const tile = document.createElement("div");
     tile.className = "card-tile";
 
-    const isOwned = owned[collectionId]?.includes(card.cardNumber);
+    const img = document.createElement("img");
+    img.className = "card-image";
 
-    // ⭐ ABSOLUTE PATH FIX
     const imgSrc = isOwned
-      ? `/poke-testing/collections/${collectionId}/${card.file}`
+      ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
       : `/poke-testing/assets/logos/cardback.jpg`;
 
-    tile.innerHTML = `
-      <img src="${imgSrc}" class="card-image" />
-      <p>${card.cardNumber}</p>
-    `;
+    img.src = imgSrc;
 
-    tile.onclick = () => openCardModal(card, imgSrc, collectionId);
+    tile.appendChild(img);
 
-    grid.appendChild(tile);
+    tile.addEventListener("click", () => {
+      openCardModal(card, isOwned);
+    });
+
+    cardGrid.appendChild(tile);
   });
 }
 
-/* -------------------------------------------------------
-   CARD MODAL
-------------------------------------------------------- */
+function openCardModal(card, isOwned) {
+  const imgSrc = isOwned
+    ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
+    : `/poke-testing/assets/logos/cardback.jpg`;
 
-function openCardModal(card, imgSrc, collectionId) {
-  const modal = document.getElementById("card-modal");
-  const modalImg = document.getElementById("modal-image");
-  const modalName = document.getElementById("modal-name");
-  const modalRarity = document.getElementById("modal-rarity");
+  modalImage.src = imgSrc;
+  modalName.textContent = card.name || "";
+  modalRarity.textContent = card.rarity || "";
 
-  modalImg.src = imgSrc;
-  modalName.textContent = card.name;
-  modalRarity.textContent = card.rarity;
-
-  modal.classList.remove("hidden");
-
-  const closeBtn = document.getElementById("modal-close");
-  closeBtn.onclick = () => {
-    modal.classList.add("hidden");
-  };
-
-  modalImg.onclick = () => {
-    const owned = getOwnedCards();
-    owned[collectionId] = owned[collectionId] || [];
-
-    if (!owned[collectionId].includes(card.cardNumber)) {
-      owned[collectionId].push(card.cardNumber);
-
-      const catchSound = new Audio("/poke-testing/assets/audio/catch.mp3");
-      catchSound.play();
-    } else {
-      owned[collectionId] = owned[collectionId].filter(n => n !== card.cardNumber);
-    }
-
-    saveOwnedCards(owned);
-    modal.classList.add("hidden");
-
-    const { cardData } = window.currentCollection;
-    renderCards(cardData, collectionId);
-  };
+  cardModal.classList.remove("hidden");
 }
 
-/* -------------------------------------------------------
-   BACK BUTTON (Viewer → Selector)
-------------------------------------------------------- */
-
-document.getElementById("back-button").onclick = () => {
-  document.getElementById("card-viewer").classList.add("hidden");
-  document.getElementById("my-collections").classList.add("hidden");
-  document.getElementById("collection-selector").classList.remove("hidden");
-};
-
-/* -------------------------------------------------------
-   MY COLLECTIONS PAGE
-------------------------------------------------------- */
-
-function showMyCollections() {
-  const selector = document.getElementById("collection-selector");
-  const viewer = document.getElementById("card-viewer");
-  const mc = document.getElementById("my-collections");
-
-  selector.classList.add("hidden");
-  viewer.classList.add("hidden");
-  mc.classList.remove("hidden");
-
-  const grid = document.getElementById("my-collections-grid");
-  grid.innerHTML = "";
-
-  const owned = getOwnedCards();
-
-  collections.forEach(col => {
-    const colOwned = owned[col.id] || [];
-    const totalCards = window.collectionSizes[col.id] || 0;
-
-    if (colOwned.length === 0) return;
-
-    const tile = document.createElement("div");
-    tile.className = "mc-tile";
-
-    tile.innerHTML = `
-      <img src="/poke-testing/assets/logos/${col.logo}" class="mc-logo" />
-      <h3>${col.name}</h3>
-      <p class="mc-progress">${colOwned.length} / ${totalCards} cards owned</p>
-    `;
-
-    tile.onclick = () => enterCollection(col.id, col.name);
-
-    grid.appendChild(tile);
-  });
+function closeCardModal() {
+  cardModal.classList.add("hidden");
 }
-
-document.getElementById("my-collections-button").onclick = showMyCollections;
-
-document.getElementById("mc-back-button").onclick = () => {
-  document.getElementById("my-collections").classList.add("hidden");
-  document.getElementById("collection-selector").classList.remove("hidden");
-};
-
-/* -------------------------------------------------------
-   CATCH A RANDOM POKÉMON
-------------------------------------------------------- */
 
 function catchRandomPokemon() {
-  const { id, cardData } = window.currentCollection;
+  if (!currentCollectionData || !currentCollectionId) return;
 
-  const randomCard = cardData[Math.floor(Math.random() * cardData.length)];
+  const unowned = currentCollectionData.filter(card => {
+    const key = `${currentCollectionId}:${card.id}`;
+    return ownedCards.get(key) !== true;
+  });
 
-  const owned = getOwnedCards();
-  owned[id] = owned[id] || [];
-
-  const alreadyOwned = owned[id].includes(randomCard.cardNumber);
-
-  if (!alreadyOwned) {
-    owned[id].push(randomCard.cardNumber);
-    saveOwnedCards(owned);
-
-    const catchSound = new Audio("/poke-testing/assets/audio/catch.mp3");
-    catchSound.play();
+  if (unowned.length === 0) {
+    alert("You already own all cards in this collection!");
+    return;
   }
 
-  const modal = document.getElementById("card-modal");
-  const modalImg = document.getElementById("modal-image");
-  const modalName = document.getElementById("modal-name");
-  const modalRarity = document.getElementById("modal-rarity");
+  const randomCard = unowned[Math.floor(Math.random() * unowned.length)];
+  const key = `${currentCollectionId}:${randomCard.id}`;
+  ownedCards.set(key, true);
 
-  // ⭐ ABSOLUTE PATH FIX
-  const imgSrc = `/poke-testing/collections/${id}/${randomCard.file}`;
+  const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
 
-  modalImg.src = imgSrc;
-  modalName.textContent = randomCard.name;
-  modalRarity.textContent = randomCard.rarity;
+  modalImage.src = imgSrc;
+  modalName.textContent = randomCard.name || "";
+  modalRarity.textContent = randomCard.rarity || "";
 
-  modal.classList.remove("hidden");
+  cardModal.classList.remove("hidden");
 
-  renderCards(cardData, id);
+  modalClose.onclick = () => {
+    closeCardModal();
+    renderCardViewer();
+  };
 }
 
-document.getElementById("catch-button").onclick = catchRandomPokemon;
+function renderMyCollectionsPage() {
+  myCollectionsGrid.innerHTML = "";
 
-/* -------------------------------------------------------
-   INITIALIZE SELECTOR
-------------------------------------------------------- */
+  collections.forEach(col => {
+    loadCollectionData(col.id).then(data => {
+      let ownedCount = 0;
+      data.forEach(card => {
+        const key = `${col.id}:${card.id}`;
+        if (ownedCards.get(key) === true) ownedCount++;
+      });
 
+      if (ownedCount === 0) return;
+
+      const tile = document.createElement("div");
+      tile.className = "mc-tile";
+
+      const img = document.createElement("img");
+      img.className = "mc-logo";
+      img.src = `/poke-testing/collections/${col.id}/${col.logo}`;
+
+      const name = document.createElement("div");
+      name.textContent = col.name;
+
+      const progress = document.createElement("div");
+      progress.className = "mc-progress";
+      progress.textContent = `Owned: ${ownedCount} / ${data.length}`;
+
+      tile.appendChild(img);
+      tile.appendChild(name);
+      tile.appendChild(progress);
+
+      tile.addEventListener("click", () => {
+        currentCollectionId = col.id;
+        currentCollectionData = data;
+        renderCardViewer();
+      });
+
+      myCollectionsGrid.appendChild(tile);
+    });
+  });
+}
+
+// EVENT WIRING
+myCollectionsButtonHome.addEventListener("click", () => {
+  renderMyCollectionsPage();
+  showScreen("myCollections");
+});
+
+overviewBackButton.addEventListener("click", () => {
+  showScreen("home");
+});
+
+overviewMyCollectionButton.addEventListener("click", () => {
+  renderCardViewer();
+});
+
+viewerBackButton.addEventListener("click", () => {
+  enterCollectionOverview(currentCollectionId);
+});
+
+viewerMyCollectionButton.addEventListener("click", () => {
+  renderCardViewer();
+});
+
+mcBackButton.addEventListener("click", () => {
+  showScreen("home");
+});
+
+catchOpenImageOverview.addEventListener("click", catchRandomPokemon);
+catchClosedImageOverview.addEventListener("click", catchRandomPokemon);
+catchOpenImageViewer.addEventListener("click", catchRandomPokemon);
+catchClosedImageViewer.addEventListener("click", catchRandomPokemon);
+
+modalClose.addEventListener("click", () => {
+  closeCardModal();
+});
+
+// INITIALIZE
 renderCollectionSelector();
+showScreen("home");
