@@ -33,6 +33,7 @@ const rarityConfig = {
   }
 };
 
+const collectionCache = new Map(); // collectionId => cardData array
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
 const collectionOverview = document.getElementById("collection-overview");
@@ -82,6 +83,27 @@ let currentModalCard = null;
 
 const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
 
+function saveOwnedCards() {
+  const obj = Object.fromEntries(ownedCards);
+  localStorage.setItem("ownedCards", JSON.stringify(obj));
+}
+
+function loadOwnedCards() {
+  const raw = localStorage.getItem("ownedCards");
+  if (!raw) return;
+
+  try {
+    const obj = JSON.parse(raw);
+    ownedCards.clear();
+    for (const [key, value] of Object.entries(obj)) {
+      ownedCards.set(key, value);
+    }
+  } catch (e) {
+    console.error("Failed to load ownedCards:", e);
+  }
+}
+
+
 function showScreen(screen) {
   mainHeader.classList.add("hidden");
   collectionSelector.classList.add("hidden");
@@ -106,9 +128,39 @@ function showScreen(screen) {
   }
 }
 
-function loadCollectionData(collectionId) {
-  return import(`../collections/${collectionId}/cardData.js`)
-    .then(module => module.default || module.cards || module.cardData);
+async function loadCollectionData(collectionId) {
+  // Return cached data if available
+  if (collectionCache.has(collectionId)) {
+    return collectionCache.get(collectionId);
+  }
+
+  // Load module
+  const module = await import(`../collections/${collectionId}/cardData.js`);
+
+  // Normalize all possible export shapes
+  let data = null;
+
+  if (Array.isArray(module.default)) data = module.default;
+  else if (Array.isArray(module.cards)) data = module.cards;
+  else if (Array.isArray(module.cardData)) data = module.cardData;
+  else {
+    for (const value of Object.values(module)) {
+      if (Array.isArray(value)) {
+        data = value;
+        break;
+      }
+    }
+  }
+
+  if (!data) {
+    console.error(`ERROR: cardData.js for ${collectionId} did not export an array.`);
+    data = [];
+  }
+
+  // Cache it
+  collectionCache.set(collectionId, data);
+
+  return data;
 }
 
 /* HOME — COLLECTION SELECTOR */
@@ -305,6 +357,7 @@ function resetCurrentCollection() {
   currentCollectionData.forEach(card => {
     const key = `${currentCollectionId}:${card.id}`;
     ownedCards.delete(key);
+    saveOwnedCards();
   });
 
   renderCardViewer();
@@ -332,6 +385,9 @@ function catchRandomPokemon() {
 
   // Mark it owned
   ownedCards.set(key, true);
+
+  saveOwnedCards();
+
 
 // Prepare modal content
 const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
@@ -367,46 +423,49 @@ document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
 
 
 /* MY COLLECTIONS (PLURAL) */
-function renderMyCollectionsPage() {
+async function renderMyCollectionsPage() {
   myCollectionsGrid.innerHTML = "";
 
-  collections.forEach(col => {
-    loadCollectionData(col.id).then(data => {
-      let ownedCount = 0;
-      data.forEach(card => {
-        const key = `${col.id}:${card.id}`;
-        if (ownedCards.get(key) === true) ownedCount++;
-      });
+  for (const col of collections) {
+    const data = await loadCollectionData(col.id);
 
-      if (ownedCount === 0) return;
+    // Count owned cards instantly
+    let ownedCount = 0;
+    for (const card of data) {
+      const key = `${col.id}:${card.id}`;
+      if (ownedCards.get(key) === true) ownedCount++;
+    }
 
-      const tile = document.createElement("div");
-      tile.className = "mc-tile";
+    // Skip collections with no owned cards
+    if (ownedCount === 0) continue;
 
-      const img = document.createElement("img");
-      img.className = "mc-logo";
-      img.src = `/poke-testing/assets/logos/${col.logo}`;
+    // Build tile
+    const tile = document.createElement("div");
+    tile.className = "mc-tile";
 
-      const name = document.createElement("div");
-      name.textContent = col.name;
+    const img = document.createElement("img");
+    img.className = "mc-logo";
+    img.src = `/poke-testing/assets/logos/${col.logo}`;
 
-      const progress = document.createElement("div");
-      progress.className = "mc-progress";
-      progress.textContent = `Owned: ${ownedCount} / ${data.length}`;
+    const name = document.createElement("div");
+    name.textContent = col.name;
 
-      tile.appendChild(img);
-      tile.appendChild(name);
-      tile.appendChild(progress);
+    const progress = document.createElement("div");
+    progress.className = "mc-progress";
+    progress.textContent = `Owned: ${ownedCount} / ${data.length}`;
 
-      tile.addEventListener("click", () => {
-        currentCollectionId = col.id;
-        currentCollectionData = data;
-        renderCardViewer();
-      });
+    tile.appendChild(img);
+    tile.appendChild(name);
+    tile.appendChild(progress);
 
-      myCollectionsGrid.appendChild(tile);
+    tile.addEventListener("click", () => {
+      currentCollectionId = col.id;
+      currentCollectionData = data;
+      renderCardViewer();
     });
-  });
+
+    myCollectionsGrid.appendChild(tile);
+  }
 }
 
 /* EVENTS */
@@ -475,5 +534,6 @@ modalImage.addEventListener("touchend", () => {
 });
 
 /* INIT */
+loadOwnedCards();
 renderCollectionSelector();
 showScreen("home");
