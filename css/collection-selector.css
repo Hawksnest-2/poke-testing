@@ -165,3 +165,16 @@ body {
   margin-right: 8px;
   vertical-align: middle;
 }
+
+/* My Collections button on home */
+.my-collections-button {
+  background: #222;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin: 20px auto;
+  display: block;
+  font-size: 1.2rem;
+}
