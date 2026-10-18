@@ -24,7 +24,7 @@ function renderCollectionSelector() {
     tile.className = "collection-tile";
 
     tile.innerHTML = `
-      <img src="./assets/logos/${col.logo}" class="collection-logo" />
+      <img src="/poke-testing/assets/logos/${col.logo}" class="collection-logo" />
       <span class="collection-name">${col.name}</span>
     `;
 
@@ -52,8 +52,8 @@ async function enterCollection(id, name) {
 
   title.textContent = name;
 
-  // ⭐ FIXED PATH FOR GITHUB PAGES
-  const { cardData } = await import(`./collections/${id}/cardData.js`);
+  // ⭐ ABSOLUTE PATH FIX
+  const { cardData } = await import(`/poke-testing/collections/${id}/cardData.js`);
 
   window.currentCollection = { id, name, cardData };
   window.collectionSizes[id] = cardData.length;
@@ -77,10 +77,10 @@ function renderCards(cards, collectionId) {
 
     const isOwned = owned[collectionId]?.includes(card.cardNumber);
 
-    // ⭐ FIXED PATH FOR GITHUB PAGES
+    // ⭐ ABSOLUTE PATH FIX
     const imgSrc = isOwned
-      ? `./collections/${collectionId}/images/${card.file}`
-      : `./assets/logos/cardback.jpg`;
+      ? `/poke-testing/collections/${collectionId}/images/${card.file}`
+      : `/poke-testing/assets/logos/cardback.jpg`;
 
     tile.innerHTML = `
       <img src="${imgSrc}" class="card-image" />
@@ -109,13 +109,11 @@ function openCardModal(card, imgSrc, collectionId) {
 
   modal.classList.remove("hidden");
 
-  // Remove any previous listener to avoid stacking
   const closeBtn = document.getElementById("modal-close");
   closeBtn.onclick = () => {
     modal.classList.add("hidden");
   };
 
-  // Toggle ownership ONLY when clicking the card image
   modalImg.onclick = () => {
     const owned = getOwnedCards();
     owned[collectionId] = owned[collectionId] || [];
@@ -123,7 +121,7 @@ function openCardModal(card, imgSrc, collectionId) {
     if (!owned[collectionId].includes(card.cardNumber)) {
       owned[collectionId].push(card.cardNumber);
 
-      const catchSound = new Audio("./assets/audio/catch.mp3");
+      const catchSound = new Audio("/poke-testing/assets/audio/catch.mp3");
       catchSound.play();
     } else {
       owned[collectionId] = owned[collectionId].filter(n => n !== card.cardNumber);
@@ -175,7 +173,7 @@ function showMyCollections() {
     tile.className = "mc-tile";
 
     tile.innerHTML = `
-      <img src="./assets/logos/${col.logo}" class="mc-logo" />
+      <img src="/poke-testing/assets/logos/${col.logo}" class="mc-logo" />
       <h3>${col.name}</h3>
       <p class="mc-progress">${colOwned.length} / ${totalCards} cards owned</p>
     `;
@@ -211,7 +209,7 @@ function catchRandomPokemon() {
     owned[id].push(randomCard.cardNumber);
     saveOwnedCards(owned);
 
-    const catchSound = new Audio("./assets/audio/catch.mp3");
+    const catchSound = new Audio("/poke-testing/assets/audio/catch.mp3");
     catchSound.play();
   }
 
@@ -220,8 +218,8 @@ function catchRandomPokemon() {
   const modalName = document.getElementById("modal-name");
   const modalRarity = document.getElementById("modal-rarity");
 
-  // ⭐ FIXED PATH FOR GITHUB PAGES
-  const imgSrc = `./collections/${id}/images/${randomCard.file}`;
+  // ⭐ ABSOLUTE PATH FIX
+  const imgSrc = `/poke-testing/collections/${id}/images/${randomCard.file}`;
 
   modalImg.src = imgSrc;
   modalName.textContent = randomCard.name;
