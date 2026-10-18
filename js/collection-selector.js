@@ -82,7 +82,6 @@ let currentCollectionId = null;
 let currentCollectionData = null;
 let pendingCatchRefresh = false;
 let currentModalCard = null;
-let swipeEnabled = true;
 
 const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
 
@@ -280,8 +279,6 @@ document.getElementById("modal-rarity-text").textContent = card.rarity;
     content.classList.add("rarity-rare");
   }
 
-  // Enable swipe navigation for normal modal opens
-  swipeEnabled = true;
 
   // Show modal
   cardModal.classList.remove("hidden");
@@ -350,7 +347,7 @@ document.getElementById("modal-rarity-text").textContent = card.rarity;
     content.classList.add("rarity-rare");
   }
 
-  // Track which card is open in modal (for swipe navigation)
+  // Track which card is open in modal (for  navigation)
   currentModalCard = randomCard;
 
   // Show modal
@@ -359,8 +356,6 @@ document.getElementById("modal-rarity-text").textContent = card.rarity;
   // Tell modalClose handler to refresh viewer once
   pendingCatchRefresh = true;
 
-  // Disable swipe navigation for this modal open
-  swipeEnabled = false;
 }
 
 
@@ -451,39 +446,6 @@ catchClosedImageViewer.addEventListener("click", catchRandomPokemon);
 /* Reset My Collection */
 document.getElementById("reset-my-collection-button")
   .addEventListener("click", resetCurrentCollection);
-
-/* SWIPE LEFT/RIGHT IN MODAL */
-let touchStartX = 0;
-
-cardModal.addEventListener("touchstart", (e) => {
-  if (!currentCollectionData || !currentModalCard) return;
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-cardModal.addEventListener("touchend", (e) => {
-  if (!currentCollectionData || !currentModalCard) return;
-
-  const touchEndX = e.changedTouches[0].screenX;
-  const diff = touchEndX - touchStartX;
-
-  if (Math.abs(diff) < 120) return;
-
-  const ownedList = currentCollectionData.filter(card => {
-    const key = `${currentCollectionId}:${card.id}`;
-    return ownedCards.get(key) === true;
-  });
-
-  const currentIndex = ownedList.findIndex(c => c.id === currentModalCard.id);
-  if (currentIndex === -1) return;
-
-  if (diff < 0 && currentIndex < ownedList.length - 1) {
-    currentModalCard = ownedList[currentIndex + 1];
-    openCardModal(currentModalCard, true);
-  } else if (diff > 0 && currentIndex > 0) {
-    currentModalCard = ownedList[currentIndex - 1];
-    openCardModal(currentModalCard, true);
-  }
-});
 
 /* PINCH ZOOM */
 let scale = 1;
