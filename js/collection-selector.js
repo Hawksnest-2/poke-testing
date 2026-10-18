@@ -82,6 +82,7 @@ let currentCollectionId = null;
 let currentCollectionData = null;
 let pendingCatchRefresh = false;
 let currentModalCard = null;
+let swipeEnabled = true;
 
 const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
 
@@ -253,8 +254,10 @@ function renderCardViewer() {
 
 /* MODAL */
 function openCardModal(card, isOwned) {
+  // Track which card is currently open (needed for swipe navigation)
   currentModalCard = card;
 
+  // Determine correct image (front if owned, back if not)
   const imgSrc = isOwned
     ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
     : `/poke-testing/assets/logos/cardback.jpg`;
@@ -263,6 +266,7 @@ function openCardModal(card, isOwned) {
   modalName.textContent = card.name || "";
   modalRarity.textContent = card.rarity || "";
 
+  // Apply rarity-colored border
   const content = cardModal.querySelector(".card-modal-content");
   content.classList.remove("rarity-common", "rarity-uncommon", "rarity-rare");
 
@@ -274,6 +278,10 @@ function openCardModal(card, isOwned) {
     content.classList.add("rarity-rare");
   }
 
+  // Enable swipe navigation for normal modal opens
+  swipeEnabled = true;
+
+  // Show modal
   cardModal.classList.remove("hidden");
 }
 
@@ -285,6 +293,7 @@ function closeCardModal() {
 function catchRandomPokemon() {
   if (!currentCollectionData || !currentCollectionId) return;
 
+  // Find all unowned cards
   const unowned = currentCollectionData.filter(card => {
     const key = `${currentCollectionId}:${card.id}`;
     return ownedCards.get(key) !== true;
@@ -295,16 +304,20 @@ function catchRandomPokemon() {
     return;
   }
 
+  // Pick a random unowned card
   const randomCard = unowned[Math.floor(Math.random() * unowned.length)];
   const key = `${currentCollectionId}:${randomCard.id}`;
+
+  // Mark it owned
   ownedCards.set(key, true);
 
+  // Prepare modal content
   const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
-
   modalImage.src = imgSrc;
   modalName.textContent = randomCard.name || "";
   modalRarity.textContent = randomCard.rarity || "";
 
+  // Apply rarity border
   const content = cardModal.querySelector(".card-modal-content");
   content.classList.remove("rarity-common", "rarity-uncommon", "rarity-rare");
 
@@ -316,10 +329,19 @@ function catchRandomPokemon() {
     content.classList.add("rarity-rare");
   }
 
+  // Track which card is open in modal (for swipe navigation)
   currentModalCard = randomCard;
+
+  // Show modal
   cardModal.classList.remove("hidden");
+
+  // Tell modalClose handler to refresh viewer once
   pendingCatchRefresh = true;
+
+  // Disable swipe navigation for this modal open
+  swipeEnabled = false;
 }
+
 
 /* MY COLLECTIONS (PLURAL) */
 function renderMyCollectionsPage() {
@@ -419,7 +441,7 @@ cardModal.addEventListener("touchend", (e) => {
   const touchEndX = e.changedTouches[0].screenX;
   const diff = touchEndX - touchStartX;
 
-  if (Math.abs(diff) < 50) return;
+  if (Math.abs(diff) < 120) return;
 
   const ownedList = currentCollectionData.filter(card => {
     const key = `${currentCollectionId}:${card.id}`;
