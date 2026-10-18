@@ -239,13 +239,35 @@ function renderCardViewer() {
 
     img.src = imgSrc;
 
-    tile.appendChild(img);
+tile.appendChild(img);
 
-    /* ⭐ FIX #4 — check ownership at click time */
-    tile.addEventListener("click", () => {
-      const isOwnedNow = ownedCards.get(key) === true;
-      openCardModal(card, isOwnedNow);
-    });
+/* --- NEW: Card Info Below Thumbnail --- */
+const info = document.createElement("div");
+info.className = "card-info";
+
+const num = document.createElement("div");
+num.className = "card-number";
+num.textContent = `#${String(card.id).padStart(3, "0")}`;
+
+const name = document.createElement("div");
+name.className = "card-name";
+name.textContent = card.name;
+
+const rarity = document.createElement("div");
+rarity.className = "card-rarity";
+rarity.textContent = `${rarityLegend[card.rarity]} ${card.rarity}`;
+
+info.appendChild(num);
+info.appendChild(name);
+info.appendChild(rarity);
+
+tile.appendChild(info);
+
+/* --- Click handler (ownership checked at click time) --- */
+tile.addEventListener("click", () => {
+  const isOwnedNow = ownedCards.get(key) === true;
+  openCardModal(card, isOwnedNow);
+});
 
     cardGrid.appendChild(tile);
   });
