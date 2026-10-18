@@ -60,7 +60,6 @@ const cardGrid = document.getElementById("card-grid");
 
 const modalImage = document.getElementById("modal-image");
 const modalName = document.getElementById("modal-name");
-const modalRarity = document.getElementById("modal-rarity");
 const modalClose = document.getElementById("modal-close");
 
 const myCollectionsButtonHome = document.getElementById("my-collections-button");
