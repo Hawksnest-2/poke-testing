@@ -52,7 +52,8 @@ async function enterCollection(id, name) {
 
   title.textContent = name;
 
-  const { cardData } = await import(`../collections/${id}/cardData.js`);
+  // ⭐ FIXED PATH FOR GITHUB PAGES
+  const { cardData } = await import(`./collections/${id}/cardData.js`);
 
   window.currentCollection = { id, name, cardData };
   window.collectionSizes[id] = cardData.length;
@@ -76,9 +77,10 @@ function renderCards(cards, collectionId) {
 
     const isOwned = owned[collectionId]?.includes(card.cardNumber);
 
+    // ⭐ FIXED PATH FOR GITHUB PAGES
     const imgSrc = isOwned
-      ? `../collections/${collectionId}/images/${card.file}`
-      : `../assets/logos/cardback.jpg`;
+      ? `./collections/${collectionId}/images/${card.file}`
+      : `./assets/logos/cardback.jpg`;
 
     tile.innerHTML = `
       <img src="${imgSrc}" class="card-image" />
@@ -134,7 +136,6 @@ function openCardModal(card, imgSrc, collectionId) {
     renderCards(cardData, collectionId);
   };
 }
-
 
 /* -------------------------------------------------------
    BACK BUTTON (Viewer → Selector)
@@ -219,7 +220,8 @@ function catchRandomPokemon() {
   const modalName = document.getElementById("modal-name");
   const modalRarity = document.getElementById("modal-rarity");
 
-  const imgSrc = `../collections/${id}/images/${randomCard.file}`;
+  // ⭐ FIXED PATH FOR GITHUB PAGES
+  const imgSrc = `./collections/${id}/images/${randomCard.file}`;
 
   modalImg.src = imgSrc;
   modalName.textContent = randomCard.name;
