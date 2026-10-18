@@ -34,20 +34,6 @@
   font-size: 1.1rem;
 }
 
-.catch-images {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.catch-image {
-  width: 80px;
-  height: auto;
-  cursor: pointer;
-}
-
 /* CARD GRID: 4-wide */
 .card-grid {
   display: grid;
