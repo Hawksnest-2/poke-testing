@@ -2,6 +2,9 @@
 import { collections } from "./manifest.js";
 import { rarityLegend } from "./rarity.js";
 
+/* ============================
+   RARITY BUCKET CONFIG (3 buckets)
+   ============================ */
 const rarityConfig = {
   common: {
     icon: rarityLegend["Common"],
@@ -33,6 +36,9 @@ const rarityConfig = {
   }
 };
 
+/* ============================
+   DOM ELEMENTS
+   ============================ */
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
 const collectionOverview = document.getElementById("collection-overview");
@@ -77,11 +83,18 @@ const catchClosedImageViewer = document.getElementById("viewer-catch-closed-imag
 
 const myCollectionsGrid = document.getElementById("my-collections-grid");
 
+/* ============================
+   STATE
+   ============================ */
 let currentCollectionId = null;
 let currentCollectionData = null;
+let pendingCatchRefresh = false;   // ⭐ FIX #1
 
 const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
 
+/* ============================
+   SCREEN SWITCHER
+   ============================ */
 function showScreen(screen) {
   mainHeader.classList.add("hidden");
   collectionSelector.classList.add("hidden");
@@ -106,11 +119,17 @@ function showScreen(screen) {
   }
 }
 
+/* ============================
+   LOAD COLLECTION DATA
+   ============================ */
 function loadCollectionData(collectionId) {
   return import(`../collections/${collectionId}/cardData.js`)
     .then(module => module.default || module.cards || module.cardData);
 }
 
+/* ============================
+   HOME PAGE — COLLECTION SELECTOR
+   ============================ */
 function renderCollectionSelector() {
   collectionSelector.innerHTML = "";
 
@@ -120,7 +139,7 @@ function renderCollectionSelector() {
 
     const img = document.createElement("img");
     img.className = "collection-logo";
-    img.src = `/poke-testing/assets/logos/${col.logo}`;
+    img.src = `/poke-testing/collections/${col.id}/${col.logo}`;
 
     const name = document.createElement("span");
     name.className = "collection-name";
@@ -135,6 +154,9 @@ function renderCollectionSelector() {
   });
 }
 
+/* ============================
+   COLLECTION OVERVIEW PAGE
+   ============================ */
 async function enterCollectionOverview(collectionId) {
   currentCollectionId = collectionId;
   currentCollectionData = await loadCollectionData(collectionId);
@@ -188,6 +210,9 @@ async function enterCollectionOverview(collectionId) {
   setRarityRow(rarityCounts.rare, rarityRareFill, rarityRareText);
 }
 
+/* ============================
+   MY COLLECTION VIEWER
+   ============================ */
 function renderCardViewer() {
   if (!currentCollectionData || !currentCollectionId) return;
 
@@ -216,14 +241,19 @@ function renderCardViewer() {
 
     tile.appendChild(img);
 
+    /* ⭐ FIX #4 — check ownership at click time */
     tile.addEventListener("click", () => {
-      openCardModal(card, isOwned);
+      const isOwnedNow = ownedCards.get(key) === true;
+      openCardModal(card, isOwnedNow);
     });
 
     cardGrid.appendChild(tile);
   });
 }
 
+/* ============================
+   MODAL
+   ============================ */
 function openCardModal(card, isOwned) {
   const imgSrc = isOwned
     ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
@@ -240,6 +270,9 @@ function closeCardModal() {
   cardModal.classList.add("hidden");
 }
 
+/* ============================
+   CATCH LOGIC
+   ============================ */
 function catchRandomPokemon() {
   if (!currentCollectionData || !currentCollectionId) return;
 
@@ -265,12 +298,13 @@ function catchRandomPokemon() {
 
   cardModal.classList.remove("hidden");
 
-  modalClose.onclick = () => {
-    closeCardModal();
-    renderCardViewer();
-  };
+  /* ⭐ FIX #2 — mark that viewer should refresh after closing */
+  pendingCatchRefresh = true;
 }
 
+/* ============================
+   MY COLLECTIONS (PLURAL)
+   ============================ */
 function renderMyCollectionsPage() {
   myCollectionsGrid.innerHTML = "";
 
@@ -289,7 +323,7 @@ function renderMyCollectionsPage() {
 
       const img = document.createElement("img");
       img.className = "mc-logo";
-      img.src = `/poke-testing/assets/logos/${col.logo}`;
+      img.src = `/poke-testing/collections/${col.id}/${col.logo}`;
 
       const name = document.createElement("div");
       name.textContent = col.name;
@@ -313,7 +347,9 @@ function renderMyCollectionsPage() {
   });
 }
 
-// EVENT WIRING
+/* ============================
+   EVENT WIRING
+   ============================ */
 myCollectionsButtonHome.addEventListener("click", () => {
   renderMyCollectionsPage();
   showScreen("myCollections");
@@ -339,15 +375,24 @@ mcBackButton.addEventListener("click", () => {
   showScreen("home");
 });
 
+/* ⭐ FIX #3 — unified modal close handler */
+modalClose.addEventListener("click", () => {
+  closeCardModal();
+
+  if (pendingCatchRefresh) {
+    pendingCatchRefresh = false;
+    renderCardViewer();
+  }
+});
+
+/* Catch images */
 catchOpenImageOverview.addEventListener("click", catchRandomPokemon);
 catchClosedImageOverview.addEventListener("click", catchRandomPokemon);
 catchOpenImageViewer.addEventListener("click", catchRandomPokemon);
 catchClosedImageViewer.addEventListener("click", catchRandomPokemon);
 
-modalClose.addEventListener("click", () => {
-  closeCardModal();
-});
-
-// INITIALIZE
+/* ============================
+   INIT
+   ============================ */
 renderCollectionSelector();
 showScreen("home");
