@@ -71,7 +71,6 @@ const viewerMyCollectionButton = document.getElementById("viewer-my-collection-b
 const mcBackButton = document.getElementById("mc-back-button");
 
 const catchOpenImageOverview = document.getElementById("catch-open-image");
-const catchOpenImageViewer = document.getElementById("viewer-catch-open-image");
 
 const myCollectionsGrid = document.getElementById("my-collections-grid");
 
@@ -503,7 +502,6 @@ modalClose.addEventListener("click", () => {
 
 /* Catch images */
 catchOpenImageOverview.addEventListener("click", catchRandomPokemon);
-catchOpenImageViewer.addEventListener("click", catchRandomPokemon);
 
 /* Reset My Collection */
 document.getElementById("reset-my-collection-button")
