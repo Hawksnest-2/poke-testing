@@ -264,7 +264,9 @@ function openCardModal(card, isOwned) {
 
   modalImage.src = imgSrc;
   modalName.textContent = card.name || "";
-  modalRarity.textContent = card.rarity || "";
+document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
+document.getElementById("modal-rarity-text").textContent = card.rarity;
+
 
   // Apply rarity-colored border
   const content = cardModal.querySelector(".card-modal-content");
@@ -332,7 +334,9 @@ function catchRandomPokemon() {
   const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
   modalImage.src = imgSrc;
   modalName.textContent = randomCard.name || "";
-  modalRarity.textContent = randomCard.rarity || "";
+document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
+document.getElementById("modal-rarity-text").textContent = card.rarity;
+
 
   // Apply rarity border
   const content = cardModal.querySelector(".card-modal-content");
