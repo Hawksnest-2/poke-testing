@@ -289,6 +289,23 @@ function closeCardModal() {
   cardModal.classList.add("hidden");
 }
 
+/* Reset Collection LOGIC */
+function resetCurrentCollection() {
+  if (!currentCollectionId) return;
+
+  if (!confirm("Reset this collection? You will lose all owned cards for this set.")) {
+    return;
+  }
+
+  currentCollectionData.forEach(card => {
+    const key = `${currentCollectionId}:${card.id}`;
+    ownedCards.delete(key);
+  });
+
+  renderCardViewer();
+}
+
+
 /* CATCH LOGIC */
 function catchRandomPokemon() {
   if (!currentCollectionData || !currentCollectionId) return;
@@ -426,6 +443,10 @@ catchOpenImageOverview.addEventListener("click", catchRandomPokemon);
 catchClosedImageOverview.addEventListener("click", catchRandomPokemon);
 catchOpenImageViewer.addEventListener("click", catchRandomPokemon);
 catchClosedImageViewer.addEventListener("click", catchRandomPokemon);
+
+/* Reset My Collection */
+document.getElementById("reset-my-collection-button")
+  .addEventListener("click", resetCurrentCollection);
 
 /* SWIPE LEFT/RIGHT IN MODAL */
 let touchStartX = 0;
