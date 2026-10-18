@@ -1,15 +1,37 @@
+// js/collection-selector.js
 import { collections } from "./manifest.js";
-import { rarityConfig } from "./rarity.js"; // assumes rarityConfig.common.icon etc.
+import { rarityLegend } from "./rarity.js";
 
-/*
-  rarityConfig example expectation:
-  {
-    common: { icon: "●" },
-    uncommon: { icon: "◆" },
-    rare: { icon: "★" },
-    ultra: { icon: "⬟" }
+const rarityConfig = {
+  common: {
+    icon: rarityLegend["Common"],
+    keys: ["Common"]
+  },
+  uncommon: {
+    icon: rarityLegend["Uncommon"],
+    keys: ["Uncommon"]
+  },
+  rare: {
+    icon: rarityLegend["Rare"],
+    keys: [
+      "Rare",
+      "Double Rare",
+      "Ultra Rare",
+      "Classic Collection",
+      "Illustration Rare",
+      "Special Illustration Rare",
+      "Shiny Rare",
+      "Shiny Ultra Rare",
+      "Mega Attack Rare",
+      "Hyper Rare",
+      "Mega Hyper Rare",
+      "Pikachu Rare",
+      "Futuristic Rare",
+      "Black White Rare",
+      "ACE SPEC Rare"
+    ]
   }
-*/
+};
 
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
@@ -24,17 +46,14 @@ const overviewTotal = document.getElementById("overview-total");
 const rarityCommonIcon = document.getElementById("rarity-common-icon");
 const rarityUncommonIcon = document.getElementById("rarity-uncommon-icon");
 const rarityRareIcon = document.getElementById("rarity-rare-icon");
-const rarityUltraIcon = document.getElementById("rarity-ultra-icon");
 
 const rarityCommonFill = document.getElementById("rarity-common-fill");
 const rarityUncommonFill = document.getElementById("rarity-uncommon-fill");
 const rarityRareFill = document.getElementById("rarity-rare-fill");
-const rarityUltraFill = document.getElementById("rarity-ultra-fill");
 
 const rarityCommonText = document.getElementById("rarity-common-text");
 const rarityUncommonText = document.getElementById("rarity-uncommon-text");
 const rarityRareText = document.getElementById("rarity-rare-text");
-const rarityUltraText = document.getElementById("rarity-ultra-text");
 
 const collectionTitle = document.getElementById("collection-title");
 const cardGrid = document.getElementById("card-grid");
@@ -61,7 +80,6 @@ const myCollectionsGrid = document.getElementById("my-collections-grid");
 let currentCollectionId = null;
 let currentCollectionData = null;
 
-// Simple owned state store (you may already have something similar)
 const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
 
 function showScreen(screen) {
@@ -132,8 +150,7 @@ async function enterCollectionOverview(collectionId) {
   const rarityCounts = {
     common: { owned: 0, total: 0 },
     uncommon: { owned: 0, total: 0 },
-    rare: { owned: 0, total: 0 },
-    ultra: { owned: 0, total: 0 }
+    rare: { owned: 0, total: 0 }
   };
 
   currentCollectionData.forEach(card => {
@@ -142,19 +159,14 @@ async function enterCollectionOverview(collectionId) {
 
     if (isOwned) ownedCount++;
 
-    const rarityKey = (card.rarity || "").toLowerCase();
-    if (rarityKey.includes("common") && !rarityKey.includes("uncommon")) {
-      rarityCounts.common.total++;
-      if (isOwned) rarityCounts.common.owned++;
-    } else if (rarityKey.includes("uncommon")) {
-      rarityCounts.uncommon.total++;
-      if (isOwned) rarityCounts.uncommon.owned++;
-    } else if (rarityKey.includes("rare") && !rarityKey.includes("ultra")) {
-      rarityCounts.rare.total++;
-      if (isOwned) rarityCounts.rare.owned++;
-    } else if (rarityKey.includes("ultra")) {
-      rarityCounts.ultra.total++;
-      if (isOwned) rarityCounts.ultra.owned++;
+    const rarityName = card.rarity;
+
+    for (const bucket of ["common", "uncommon", "rare"]) {
+      if (rarityConfig[bucket].keys.includes(rarityName)) {
+        rarityCounts[bucket].total++;
+        if (isOwned) rarityCounts[bucket].owned++;
+        break;
+      }
     }
   });
 
@@ -163,7 +175,6 @@ async function enterCollectionOverview(collectionId) {
   rarityCommonIcon.textContent = rarityConfig.common.icon;
   rarityUncommonIcon.textContent = rarityConfig.uncommon.icon;
   rarityRareIcon.textContent = rarityConfig.rare.icon;
-  rarityUltraIcon.textContent = rarityConfig.ultra.icon;
 
   function setRarityRow(counts, fillEl, textEl) {
     const { owned, total } = counts;
@@ -175,7 +186,6 @@ async function enterCollectionOverview(collectionId) {
   setRarityRow(rarityCounts.common, rarityCommonFill, rarityCommonText);
   setRarityRow(rarityCounts.uncommon, rarityUncommonFill, rarityUncommonText);
   setRarityRow(rarityCounts.rare, rarityRareFill, rarityRareText);
-  setRarityRow(rarityCounts.ultra, rarityUltraFill, rarityUltraText);
 }
 
 function renderCardViewer() {
