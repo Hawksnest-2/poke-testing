@@ -12,41 +12,114 @@
 
 <body>
 
-  <!-- HEADER -->
-<div class="main-title">
-  <img src="./assets/logos/Poke_Center.png" class="pc-logo">
-  <h1 class="title">Poké‑Center</h1>
-  <img src="./assets/logos/Poke_Center.png" class="pc-logo">
-</div>
+  <!-- MAIN HEADER (HOME ONLY) -->
+  <div id="main-header">
+    <div class="main-title">
+      <img src="./assets/logos/Poke_Center.png" class="pc-logo">
+      <h1 class="title">Poké‑Center</h1>
+      <img src="./assets/logos/Poke_Center.png" class="pc-logo">
+    </div>
 
-  <!-- MY COLLECTIONS BUTTON -->
-  <button id="my-collections-button" class="my-collections-button">My Collections</button>
+    <button id="my-collections-button" class="my-collections-button">
+      My Collections
+    </button>
 
-  <h2 class="subtitle">Select a Collection</h2>
+    <h2 class="subtitle">Select a Collection</h2>
+  </div>
 
-  
-  <!-- COLLECTION SELECTOR SCREEN -->
+  <!-- COLLECTION SELECTOR SCREEN (HOME) -->
   <div id="collection-selector" class="collection-selector"></div>
 
+  <!-- COLLECTION OVERVIEW SCREEN -->
+  <div id="collection-overview" class="collection-overview hidden">
+    <button id="overview-back-button" class="back-button">
+      <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
+      Return to Poké‑Center
+    </button>
 
-  <!-- ⭐ CARD VIEWER SCREEN ⭐ -->
+    <h2 id="overview-title" class="overview-title"></h2>
+
+    <button id="overview-my-collection-button" class="my-collection-button">
+      My Collection
+    </button>
+
+    <div class="catch-images">
+      <img src="./assets/logos/catch_open.png" class="catch-image" id="catch-open-image">
+      <img src="./assets/logos/catch.jpg" class="catch-image" id="catch-closed-image">
+    </div>
+
+    <div id="overview-progress" class="overview-progress">
+      <p id="overview-total"></p>
+
+      <div class="rarity-row">
+        <span class="rarity-icon" id="rarity-common-icon"></span>
+        <span class="rarity-label">Common</span>
+        <div class="rarity-bar">
+          <div id="rarity-common-fill" class="rarity-fill"></div>
+        </div>
+        <span id="rarity-common-text" class="rarity-text"></span>
+      </div>
+
+      <div class="rarity-row">
+        <span class="rarity-icon" id="rarity-uncommon-icon"></span>
+        <span class="rarity-label">Uncommon</span>
+        <div class="rarity-bar">
+          <div id="rarity-uncommon-fill" class="rarity-fill"></div>
+        </div>
+        <span id="rarity-uncommon-text" class="rarity-text"></span>
+      </div>
+
+      <div class="rarity-row">
+        <span class="rarity-icon" id="rarity-rare-icon"></span>
+        <span class="rarity-label">Rare</span>
+        <div class="rarity-bar">
+          <div id="rarity-rare-fill" class="rarity-fill"></div>
+        </div>
+        <span id="rarity-rare-text" class="rarity-text"></span>
+      </div>
+
+      <div class="rarity-row">
+        <span class="rarity-icon" id="rarity-ultra-icon"></span>
+        <span class="rarity-label">Ultra Rare</span>
+        <div class="rarity-bar">
+          <div id="rarity-ultra-fill" class="rarity-fill"></div>
+        </div>
+        <span id="rarity-ultra-text" class="rarity-text"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY COLLECTION (SINGULAR) VIEWER -->
   <div id="card-viewer" class="card-viewer hidden">
-    <button id="back-button" class="back-button">← Back</button>
+    <button id="viewer-back-button" class="back-button">
+      Return to Collection
+    </button>
+
     <h2 id="collection-title"></h2>
-    <button id="catch-button" class="catch-button">Catch a Random Pokémon</button>
+
+    <button id="viewer-my-collection-button" class="my-collection-button">
+      My Collection
+    </button>
+
+    <div class="catch-images">
+      <img src="./assets/logos/catch_open.png" class="catch-image" id="viewer-catch-open-image">
+      <img src="./assets/logos/catch.jpg" class="catch-image" id="viewer-catch-closed-image">
+    </div>
+
     <div id="card-grid" class="card-grid"></div>
   </div>
 
-
-  <!-- ⭐ MY COLLECTIONS SCREEN ⭐ -->
+  <!-- MY COLLECTIONS (PLURAL) PAGE -->
   <div id="my-collections" class="my-collections hidden">
-    <button id="mc-back-button" class="back-button">← Back</button>
+    <button id="mc-back-button" class="back-button">
+      <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
+      Return to Poké‑Center
+    </button>
     <h2>My Collections</h2>
     <div id="my-collections-grid" class="my-collections-grid"></div>
   </div>
 
-
-  <!-- ⭐ CARD MODAL ⭐ -->
+  <!-- CARD MODAL -->
   <div id="card-modal" class="card-modal hidden">
     <div class="card-modal-content">
       <img id="modal-image" />
@@ -55,7 +128,6 @@
       <button id="modal-close">Close</button>
     </div>
   </div>
-
 
   <!-- JS -->
   <script type="module" src="./js/collection-selector.js"></script>
