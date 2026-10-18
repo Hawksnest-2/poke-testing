@@ -1,10 +1,7 @@
-// js/collection-selector.js
 import { collections } from "./manifest.js";
 import { rarityLegend } from "./rarity.js";
 
-/* ============================
-   RARITY BUCKET CONFIG (3 buckets)
-   ============================ */
+/* RARITY BUCKET CONFIG (3 buckets) */
 const rarityConfig = {
   common: {
     icon: rarityLegend["Common"],
@@ -36,9 +33,6 @@ const rarityConfig = {
   }
 };
 
-/* ============================
-   DOM ELEMENTS
-   ============================ */
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
 const collectionOverview = document.getElementById("collection-overview");
@@ -83,18 +77,14 @@ const catchClosedImageViewer = document.getElementById("viewer-catch-closed-imag
 
 const myCollectionsGrid = document.getElementById("my-collections-grid");
 
-/* ============================
-   STATE
-   ============================ */
+/* STATE */
 let currentCollectionId = null;
 let currentCollectionData = null;
-let pendingCatchRefresh = false;   // ⭐ FIX #1
+let pendingCatchRefresh = false;
+let currentModalCard = null;
 
 const ownedCards = new Map(); // key: `${collectionId}:${card.id}` => true
 
-/* ============================
-   SCREEN SWITCHER
-   ============================ */
 function showScreen(screen) {
   mainHeader.classList.add("hidden");
   collectionSelector.classList.add("hidden");
@@ -119,17 +109,12 @@ function showScreen(screen) {
   }
 }
 
-/* ============================
-   LOAD COLLECTION DATA
-   ============================ */
 function loadCollectionData(collectionId) {
   return import(`../collections/${collectionId}/cardData.js`)
     .then(module => module.default || module.cards || module.cardData);
 }
 
-/* ============================
-   HOME PAGE — COLLECTION SELECTOR
-   ============================ */
+/* HOME — COLLECTION SELECTOR */
 function renderCollectionSelector() {
   collectionSelector.innerHTML = "";
 
@@ -154,9 +139,7 @@ function renderCollectionSelector() {
   });
 }
 
-/* ============================
-   COLLECTION OVERVIEW PAGE
-   ============================ */
+/* COLLECTION OVERVIEW */
 async function enterCollectionOverview(collectionId) {
   currentCollectionId = collectionId;
   currentCollectionData = await loadCollectionData(collectionId);
@@ -210,9 +193,7 @@ async function enterCollectionOverview(collectionId) {
   setRarityRow(rarityCounts.rare, rarityRareFill, rarityRareText);
 }
 
-/* ============================
-   MY COLLECTION VIEWER
-   ============================ */
+/* MY COLLECTION VIEWER */
 function renderCardViewer() {
   if (!currentCollectionData || !currentCollectionId) return;
 
@@ -238,45 +219,42 @@ function renderCardViewer() {
       : `/poke-testing/assets/logos/cardback.jpg`;
 
     img.src = imgSrc;
+    tile.appendChild(img);
 
-tile.appendChild(img);
+    const info = document.createElement("div");
+    info.className = "card-info";
 
-/* --- NEW: Card Info Below Thumbnail --- */
-const info = document.createElement("div");
-info.className = "card-info";
+    const num = document.createElement("div");
+    num.className = "card-number";
+    num.textContent = `#${String(card.id).padStart(3, "0")}`;
 
-const num = document.createElement("div");
-num.className = "card-number";
-num.textContent = `#${String(card.id).padStart(3, "0")}`;
+    const name = document.createElement("div");
+    name.className = "card-name";
+    name.textContent = card.name;
 
-const name = document.createElement("div");
-name.className = "card-name";
-name.textContent = card.name;
+    const rarity = document.createElement("div");
+    rarity.className = "card-rarity";
+    rarity.textContent = `${rarityLegend[card.rarity]} ${card.rarity}`;
 
-const rarity = document.createElement("div");
-rarity.className = "card-rarity";
-rarity.textContent = `${rarityLegend[card.rarity]} ${card.rarity}`;
+    info.appendChild(num);
+    info.appendChild(name);
+    info.appendChild(rarity);
 
-info.appendChild(num);
-info.appendChild(name);
-info.appendChild(rarity);
+    tile.appendChild(info);
 
-tile.appendChild(info);
-
-/* --- Click handler (ownership checked at click time) --- */
-tile.addEventListener("click", () => {
-  const isOwnedNow = ownedCards.get(key) === true;
-  openCardModal(card, isOwnedNow);
-});
+    tile.addEventListener("click", () => {
+      const isOwnedNow = ownedCards.get(key) === true;
+      openCardModal(card, isOwnedNow);
+    });
 
     cardGrid.appendChild(tile);
   });
 }
 
-/* ============================
-   MODAL
-   ============================ */
+/* MODAL */
 function openCardModal(card, isOwned) {
+  currentModalCard = card;
+
   const imgSrc = isOwned
     ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
     : `/poke-testing/assets/logos/cardback.jpg`;
@@ -285,6 +263,17 @@ function openCardModal(card, isOwned) {
   modalName.textContent = card.name || "";
   modalRarity.textContent = card.rarity || "";
 
+  const content = cardModal.querySelector(".card-modal-content");
+  content.classList.remove("rarity-common", "rarity-uncommon", "rarity-rare");
+
+  if (rarityConfig.common.keys.includes(card.rarity)) {
+    content.classList.add("rarity-common");
+  } else if (rarityConfig.uncommon.keys.includes(card.rarity)) {
+    content.classList.add("rarity-uncommon");
+  } else {
+    content.classList.add("rarity-rare");
+  }
+
   cardModal.classList.remove("hidden");
 }
 
@@ -292,9 +281,7 @@ function closeCardModal() {
   cardModal.classList.add("hidden");
 }
 
-/* ============================
-   CATCH LOGIC
-   ============================ */
+/* CATCH LOGIC */
 function catchRandomPokemon() {
   if (!currentCollectionData || !currentCollectionId) return;
 
@@ -318,15 +305,23 @@ function catchRandomPokemon() {
   modalName.textContent = randomCard.name || "";
   modalRarity.textContent = randomCard.rarity || "";
 
-  cardModal.classList.remove("hidden");
+  const content = cardModal.querySelector(".card-modal-content");
+  content.classList.remove("rarity-common", "rarity-uncommon", "rarity-rare");
 
-  /* ⭐ FIX #2 — mark that viewer should refresh after closing */
+  if (rarityConfig.common.keys.includes(randomCard.rarity)) {
+    content.classList.add("rarity-common");
+  } else if (rarityConfig.uncommon.keys.includes(randomCard.rarity)) {
+    content.classList.add("rarity-uncommon");
+  } else {
+    content.classList.add("rarity-rare");
+  }
+
+  currentModalCard = randomCard;
+  cardModal.classList.remove("hidden");
   pendingCatchRefresh = true;
 }
 
-/* ============================
-   MY COLLECTIONS (PLURAL)
-   ============================ */
+/* MY COLLECTIONS (PLURAL) */
 function renderMyCollectionsPage() {
   myCollectionsGrid.innerHTML = "";
 
@@ -369,9 +364,7 @@ function renderMyCollectionsPage() {
   });
 }
 
-/* ============================
-   EVENT WIRING
-   ============================ */
+/* EVENTS */
 myCollectionsButtonHome.addEventListener("click", () => {
   renderMyCollectionsPage();
   showScreen("myCollections");
@@ -397,7 +390,6 @@ mcBackButton.addEventListener("click", () => {
   showScreen("home");
 });
 
-/* ⭐ FIX #3 — unified modal close handler */
 modalClose.addEventListener("click", () => {
   closeCardModal();
 
@@ -413,8 +405,61 @@ catchClosedImageOverview.addEventListener("click", catchRandomPokemon);
 catchOpenImageViewer.addEventListener("click", catchRandomPokemon);
 catchClosedImageViewer.addEventListener("click", catchRandomPokemon);
 
-/* ============================
-   INIT
-   ============================ */
+/* SWIPE LEFT/RIGHT IN MODAL */
+let touchStartX = 0;
+
+cardModal.addEventListener("touchstart", (e) => {
+  if (!currentCollectionData || !currentModalCard) return;
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+cardModal.addEventListener("touchend", (e) => {
+  if (!currentCollectionData || !currentModalCard) return;
+
+  const touchEndX = e.changedTouches[0].screenX;
+  const diff = touchEndX - touchStartX;
+
+  if (Math.abs(diff) < 50) return;
+
+  const ownedList = currentCollectionData.filter(card => {
+    const key = `${currentCollectionId}:${card.id}`;
+    return ownedCards.get(key) === true;
+  });
+
+  const currentIndex = ownedList.findIndex(c => c.id === currentModalCard.id);
+  if (currentIndex === -1) return;
+
+  if (diff < 0 && currentIndex < ownedList.length - 1) {
+    currentModalCard = ownedList[currentIndex + 1];
+    openCardModal(currentModalCard, true);
+  } else if (diff > 0 && currentIndex > 0) {
+    currentModalCard = ownedList[currentIndex - 1];
+    openCardModal(currentModalCard, true);
+  }
+});
+
+/* PINCH ZOOM */
+let scale = 1;
+let startDistance = 0;
+
+modalImage.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 2) {
+    const [t1, t2] = e.touches;
+    const dx = t1.pageX - t2.pageX;
+    const dy = t1.pageY - t2.pageY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (!startDistance) startDistance = distance;
+
+    scale = Math.min(4, Math.max(1, distance / startDistance));
+    modalImage.style.transform = `scale(${scale})`;
+  }
+});
+
+modalImage.addEventListener("touchend", () => {
+  startDistance = 0;
+});
+
+/* INIT */
 renderCollectionSelector();
 showScreen("home");
