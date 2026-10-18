@@ -79,7 +79,7 @@ function renderCards(cards, collectionId) {
 
     // ⭐ ABSOLUTE PATH FIX
     const imgSrc = isOwned
-      ? `/poke-testing/collections/${collectionId}/images/${card.file}`
+      ? `/poke-testing/collections/${collectionId}/${card.file}`
       : `/poke-testing/assets/logos/cardback.jpg`;
 
     tile.innerHTML = `
@@ -219,7 +219,7 @@ function catchRandomPokemon() {
   const modalRarity = document.getElementById("modal-rarity");
 
   // ⭐ ABSOLUTE PATH FIX
-  const imgSrc = `/poke-testing/collections/${id}/images/${randomCard.file}`;
+  const imgSrc = `/poke-testing/collections/${id}/${randomCard.file}`;
 
   modalImg.src = imgSrc;
   modalName.textContent = randomCard.name;
