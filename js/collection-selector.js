@@ -327,12 +327,13 @@ function catchRandomPokemon() {
   // Mark it owned
   ownedCards.set(key, true);
 
-  // Prepare modal content
-  const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
-  modalImage.src = imgSrc;
-  modalName.textContent = randomCard.name || "";
-document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
-document.getElementById("modal-rarity-text").textContent = card.rarity;
+// Prepare modal content
+const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
+modalImage.src = imgSrc;
+modalName.textContent = randomCard.name || "";
+
+document.getElementById("modal-rarity-icon").textContent = rarityLegend[randomCard.rarity];
+document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
 
 
   // Apply rarity border
