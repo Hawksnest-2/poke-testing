@@ -282,7 +282,16 @@ document.getElementById("modal-rarity-text").textContent = card.rarity;
 }
 
 function closeCardModal() {
+  // Hide modal
   cardModal.classList.add("hidden");
+
+  // Reset pinch zoom state
+  modalImage.style.transform = "";
+  scale = 1;
+  startDistance = 0;
+
+  // Clear current modal card reference
+  currentModalCard = null;
 }
 
 /* Reset Collection LOGIC */
