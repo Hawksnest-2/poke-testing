@@ -214,7 +214,7 @@ body {
 
 /* SMALL ICON FOR BACK BUTTONS */
 .pc-icon-small {
-  width: 72px;   /* triple-sized */
+  width: 150px;   
   height: auto;
   margin-right: 8px;
   vertical-align: middle;
