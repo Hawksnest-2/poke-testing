@@ -85,6 +85,7 @@ body {
   max-width: 900px;
   margin: 0 auto;
   background: transparent !important;
+  text-align: center; 
 }
 
 .collection-overview * {
@@ -107,10 +108,24 @@ body {
 
 /* NEW: Collection logo under title */
 .overview-logo {
-  width: 200px;
+  width: 300px;
   height: auto;
   display: block;
   margin: 10px auto 20px auto;
+}
+
+/* Center the stats subtitle */
+#overview-stats-title {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Center the catch subtitle */
+#overview-catch-title {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 10px;
 }
 
 /* UPDATED: My Collection → My Pokedex */
