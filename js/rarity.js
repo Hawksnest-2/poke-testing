@@ -1,3 +1,8 @@
+/* rarity.js (UNCHANGED)
+   No terminology changes required.
+   Rarity icons and labels remain exactly the same.
+*/
+
 export const rarityLegend = {
   "Common": "⚫",
   "Uncommon": "♦️",
