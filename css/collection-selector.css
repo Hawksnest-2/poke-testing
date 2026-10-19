@@ -128,12 +128,6 @@ body {
   font-size: 1.4rem;
 }
 
-/* Pokedex icon for home page button */
-.pokedex-icon {
-  width: 48px;
-  height: auto;
-}
-
 /* CATCH ICON AREA */
 .catch-images {
   background: transparent !important;
@@ -209,18 +203,30 @@ body {
   vertical-align: middle;
 }
 
-/* UPDATED: My Collections button → My Pokedex button */
-.my-pokedex-button {
+/* Main screen Pokedex button */
+.pokedex-button {
   background: #222;
   color: #fff;
-  padding: 12px 20px;
+  padding: 20px 24px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  margin: 20px auto;
-  display: block;
-  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;   /* image above text */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;                 /* spacing between image and text */
+  font-size: 2rem;          /* text 2× larger */
 }
+
+/* Pokedex icon (main screen) */
+.pokedex-icon {
+  width: 96px;              /* 3× larger */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 
 /* hidden helper */
 .hidden {
