@@ -1,19 +1,26 @@
+/* css/card-viewer.css (UPDATED)
+   Terminology Refactor: "My Collection" → "My Pokedex"
+   Includes UI upgrades, spacing improvements, and renamed classes.
+*/
+
 .card-viewer {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
+/* Back button (shared across pages) */
 .back-button {
   background: #222;
   color: #fff;
-  padding: 10px 16px;
+  padding: 16px 24px;      /* upgraded to match overview buttons */
   border-radius: 8px;
   border: none;
   cursor: pointer;
   margin-bottom: 20px;
   display: inline-flex;
   align-items: center;
+  font-size: 1.4rem;       /* upgraded size */
 }
 
 .card-viewer h2 {
@@ -21,17 +28,26 @@
   margin: 10px 0 10px 0;
 }
 
-/* My Collection button + catch images */
-.my-collection-button {
+/* UPDATED: My Collection button → My Pokedex button */
+/* UPDATED: class renamed from .my-collection-button */
+.pokedex-button {
   background: #222;
   color: #fff;
-  padding: 10px 18px;
+  padding: 16px 24px;      /* matches Return button */
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin: 10px auto 20px auto;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+}
+
+/* Binder icon for Pokedex buttons */
+.binder-icon {
+  width: 48px;   /* triple-sized icon */
+  height: auto;
 }
 
 /* CARD GRID: 4-wide */
@@ -107,9 +123,8 @@
 .card-modal-content {
   background: #111;
   width: 100%;
-  height: 100%;          /* fill entire screen */
-  border-radius: 0;      /* fullscreen look */
-  padding: ;            /* no padding */
+  height: 100%;
+  border-radius: 0;
   padding-top: 20px;
   text-align: center;
   position: relative;
@@ -151,9 +166,9 @@
   z-index: 1;
   width: 100%;
   height: auto;
-  max-height: 85vh;      /* keep it inside screen */
-  object-fit: contain;   /* scale nicely */
-  margin-top: 60px;      /* space below close button */
+  max-height: 85vh;
+  object-fit: contain;
+  margin-top: 60px;
   touch-action: none;
   transform-origin: center center;
 }
@@ -183,6 +198,8 @@
   pointer-events: none;
 }
 
+/* UPDATED: Reset My Collection → Reset My Pokedex */
+/* Class name stays the same */
 .reset-button {
   background: #8b0000;
   color: #fff;
@@ -192,7 +209,6 @@
   cursor: pointer;
   font-size: 1.1rem;
 
-  /* Center below grid */
   display: block;
   margin: 20px auto 0 auto;
   width: fit-content;
