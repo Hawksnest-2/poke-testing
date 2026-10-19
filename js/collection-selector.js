@@ -60,6 +60,7 @@ const cardModal = document.getElementById("card-modal");
 
 const overviewTitle = document.getElementById("overview-title");
 const overviewTotal = document.getElementById("overview-total");
+const overviewTotal = document.getElementById("overview-stats-title");
 
 const rarityCommonIcon = document.getElementById("rarity-common-icon");
 const rarityUncommonIcon = document.getElementById("rarity-uncommon-icon");
