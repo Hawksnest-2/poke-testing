@@ -31,22 +31,27 @@
   <!-- COLLECTION SELECTOR SCREEN (HOME) -->
   <div id="collection-selector" class="collection-selector"></div>
 
-  <!-- COLLECTION OVERVIEW SCREEN -->
-  <div id="collection-overview" class="collection-overview hidden">
+<div id="collection-overview" class="collection-overview hidden">
+
+  <div class="overview-header">
     <button id="overview-back-button" class="back-button">
       <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
       Return to Poké‑Center
     </button>
 
-    <h2 id="overview-title" class="overview-title"></h2>
-
     <button id="overview-my-collection-button" class="my-collection-button">
+      <img src="./assets/icons/binder.png" class="binder-icon">
       My Collection
     </button>
+  </div>
 
-    <div class="catch-images">
-      <img src="./assets/logos/catch_open.png" class="catch-image" id="catch-open-image">
-    </div>
+  <h2 id="overview-title" class="overview-title"></h2>
+
+  <img id="overview-logo" class="overview-logo">
+
+  <div class="catch-images">
+    <img src="./assets/logos/catch_open.png" class="catch-image" id="catch-open-image">
+  </div>
 
     <div id="overview-progress" class="overview-progress">
       <p id="overview-total"></p>
