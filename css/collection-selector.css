@@ -1,4 +1,9 @@
-/* css/collection-selector.css */
+/* css/collection-selector.css (UPDATED)
+   Terminology Refactor: "My Collections" → "My Pokedex"
+   Includes UI upgrades, spacing improvements, and renamed classes.
+*/
+
+/* GLOBAL */
 body {
   background: #0f0f0f;
   color: #f0f0f0;
@@ -10,19 +15,19 @@ body {
 /* MAIN TITLE WITH LOGOS */
 .main-title {
   display: flex;
-  flex-direction: column;   /* was: row */
+  flex-direction: column;   /* centered vertical layout */
   align-items: center;
   gap: 8px;
 }
 
 .pc-logo {
-  width: 240px;
+  width: 240px;   /* doubled size */
   height: auto;
 }
 
 .title {
   text-align: center;
-  font-size: 4.8rem;
+  font-size: 4.8rem;   /* doubled size */
   letter-spacing: 1px;
 }
 
@@ -88,16 +93,18 @@ body {
 
 .overview-title {
   text-align: center;
-  font-size: 4rem;
+  font-size: 4rem;   /* doubled size */
   margin: 20px 0 10px 0;
 }
 
+/* UPDATED: Header wrapper for left/right alignment */
 .overview-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* NEW: Collection logo under title */
 .overview-logo {
   width: 200px;
   height: auto;
@@ -105,25 +112,32 @@ body {
   margin: 10px auto 20px auto;
 }
 
-
-.my-collection-button {
+/* UPDATED: My Collection → My Pokedex */
+/* UPDATED: class renamed from .my-collection-button */
+.pokedex-button {
   background: #222;
   color: #fff;
-  padding: 16px 24px;
+  padding: 16px 24px;       /* matches Return button */
   border-radius: 10px;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 10px auto 10px auto; /* reduced bottom margin */
+  margin: 10px auto 10px auto;
   font-size: 1.4rem;
 }
 
-/*Pokedex Icon */
+/* Binder icon for Pokedex buttons */
+.binder-icon {
+  width: 48px;   /* triple-sized icon */
+  height: auto;
+}
+
+/* Pokedex icon for home page button */
 .pokedex-icon {
-    width: 32px;
-    height: auto;
+  width: 32px;
+  height: auto;
 }
 
 /* CATCH ICON AREA */
@@ -133,7 +147,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-top: 20px;      /* spacing from button */
+  margin-top: 20px;
   margin-bottom: 30px;
 }
 
@@ -155,7 +169,7 @@ body {
 .overview-progress p {
   text-align: center;
   margin-bottom: 16px;
-  font-size: 2rem;
+  font-size: 2rem;   /* doubled size */
 }
 
 .rarity-row {
@@ -195,14 +209,14 @@ body {
 
 /* SMALL ICON FOR BACK BUTTONS */
 .pc-icon-small {
-  width: 72px;
+  width: 72px;   /* triple-sized */
   height: auto;
   margin-right: 8px;
   vertical-align: middle;
 }
 
-/* My Collections button on home */
-.my-collections-button {
+/* UPDATED: My Collections button → My Pokedex button */
+.my-pokedex-button {
   background: #222;
   color: #fff;
   padding: 12px 20px;
