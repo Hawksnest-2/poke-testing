@@ -247,7 +247,7 @@ async function enterCollectionOverview(collectionId) {
 
   overviewStatsTitle.textContent = `Your ${collectionMeta.name} Collecton Statistics`;
 
-  overviewCatchTitle.textContent = `Catch a Random Pokémon from ${collectionMeta.name} !!!`;
+  overviewCatchTitle.textContent = `Catch a Random ${collectionMeta.name} Pokémon!!!`;
  
   overviewTotal.textContent = `Owned: ${ownedCount} / ${totalCards} cards`;
 
