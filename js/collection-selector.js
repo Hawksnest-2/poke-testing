@@ -61,6 +61,7 @@ const cardModal = document.getElementById("card-modal");
 const overviewTitle = document.getElementById("overview-title");
 const overviewTotal = document.getElementById("overview-total");
 const overviewStatsTitle = document.getElementById("overview-stats-title");
+const overviewCatchTitle = document.getElementById("overview-catch-title");
 
 const rarityCommonIcon = document.getElementById("rarity-common-icon");
 const rarityUncommonIcon = document.getElementById("rarity-uncommon-icon");
@@ -245,6 +246,8 @@ async function enterCollectionOverview(collectionId) {
   });
 
   overviewStatsTitle.textContent = `Your ${collectionId} Collecton Statistics`;
+
+  overviewCatchTitle.textContent = `Catch a Random Pokémon from ${collectionId} !!!`;
  
   overviewTotal.textContent = `Owned: ${ownedCount} / ${totalCards} cards`;
 
