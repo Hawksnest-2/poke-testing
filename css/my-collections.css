@@ -48,7 +48,8 @@
 .back-button {
   background: #222;
   color: #fff;
-  padding: 10px 16px;
+  padding: 16px 24px;
+  font-size: 1.4rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
