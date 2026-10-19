@@ -44,9 +44,9 @@
   font-size: 1.4rem;
 }
 
-/* Binder icon for Pokedex buttons */
-.binder-icon {
-  width: 48px;   /* triple-sized icon */
+/* Pokedex icon for Pokedex buttons */
+.pokedex-icon {
+  width: 48px;   
   height: auto;
 }
 
