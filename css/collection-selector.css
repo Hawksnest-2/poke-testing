@@ -147,6 +147,27 @@ body {
   transform: scale(0.97); /* Shrinks slightly to feel like a real button */
 }
 
+.return-button {
+  background: #222;
+  color: #fff;
+  padding: 20px 24px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  flex-direction: column;  
+  align-items: center;
+  justify-content: center;
+  gap: 8px;             
+  font-size: clamp(1.2rem, 5vw, 1.8rem); 
+  transition: background 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent; 
+}
+
+.return-button:active {
+  background: #444;       /* Darkens/lightens to show a press */
+  transform: scale(0.97); /* Shrinks slightly to feel like a real button */
+}
+
 /* Pokedex icon (main screen and collection overview) */
 .pokedex-icon {
   width: 150px;   
