@@ -1,105 +1,117 @@
-<!-- index.html (UPDATED)
-     Terminology Refactor: "My Collections" → "My Pokedex"
-     Includes UI upgrades, icon additions, spacing improvements, and renamed CSS file.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Poké‑Center</title>
 
-  <!-- UPDATED CSS FILENAMES -->
-  <link rel="stylesheet" href="./css/collection-selector.css">
-  <link rel="stylesheet" href="./css/card-viewer.css">
-  <link rel="stylesheet" href="./css/my-pokedex.css"> <!-- renamed -->
+  <!-- Single consolidated stylesheet -->
+  ./css/styles.css
 </head>
 
 <body>
 
   <!-- MAIN HEADER (HOME ONLY) -->
   <div id="main-header">
+
     <div class="main-title">
-      <img src="./assets/logos/Poke_Center.png" class="pc-logo">
+      ./assets/logos/Poke_Center.png
       <h1 class="title">Poké‑Center</h1>
     </div>
 
-    <!-- UPDATED: My Collections → My Pokedex -->
-    <!-- UPDATED: ID + class renamed -->
-    <button id="my-pokedex-button" class="my-pokedex-button">
-      <!-- UPDATED: Pokedex icon -->
-      <img src="./assets/logos/pokedex.png" class="pokedex-icon">
+    <button id="my-pokedex-button" class="pokedex-button">
+      ./assets/logos/pokedex.png
       My Pokedex
     </button>
 
     <h2 class="subtitle">Select a Collection</h2>
+
   </div>
 
-  <!-- COLLECTION SELECTOR SCREEN (HOME) -->
+  <!-- COLLECTION SELECTOR SCREEN -->
   <div id="collection-selector" class="collection-selector"></div>
 
-<!-- COLLECTION OVERVIEW SCREEN -->
-<div id="collection-overview" class="collection-overview hidden">
+  <!-- COLLECTION OVERVIEW SCREEN -->
+  <div id="collection-overview" class="collection-overview hidden">
 
-  <!-- Header -->
-<div class="overview-header">
-<div><button id="overview-return-button" class="return-button">Return to Poké‑Center<img src="./assets/logos/Poke_Center.png" class="pc-icon-small"></button></div>
-<div><button id="overview-pokedex-button" class="pokedex-button">My Pokédex<img src="./assets/logos/pokedex.png" class="pokedex-icon"></button></div>
-</div>
+    <!-- Header -->
+    <div class="overview-header">
 
-  <!-- Collection Title -->
-  <h2 id="overview-title" class="overview-title"></h2>
-
-  <!-- Collection Logo -->
-  <img id="overview-logo" class="overview-logo">
-
-  <!-- Stats Subtitle -->
-  <h2 id="overview-stats-title" class="subtitle"></h2>
-
-  <!-- Collection Stats -->
-  <div id="overview-progress" class="overview-progress">
-    <p id="overview-total"></p>
-
-    <div class="rarity-row">
-      <span class="rarity-icon" id="rarity-common-icon"></span>
-      <span class="rarity-label">Common</span>
-      <div class="rarity-bar">
-        <div id="rarity-common-fill" class="rarity-fill"></div>
+      <div>
+        <button id="overview-back-button" class="return-button">
+          Return to Poké‑Center
+          ./assets/logos/Poke_Center.png
+        </button>
       </div>
-      <span id="rarity-common-text" class="rarity-text"></span>
+
+      <div>
+        <button id="overview-pokedex-button" class="pokedex-button">
+          My Pokedex
+          ./assets/logos/pokedex.png
+        </button>
+      </div>
+
     </div>
 
-    <div class="rarity-row">
-      <span class="rarity-icon" id="rarity-uncommon-icon"></span>
-      <span class="rarity-label">Uncommon</span>
-      <div class="rarity-bar">
-        <div id="rarity-uncommon-fill" class="rarity-fill"></div>
+    <!-- Collection Title -->
+    <h2 id="overview-title" class="overview-title"></h2>
+
+    <!-- Collection Logo -->
+    <img id="overview-logo" class="overview-logo">
+
+    <!-- Stats Subtitle -->
+    <h2 id="overview-stats-title" class="subtitle"></h2>
+
+    <!-- Collection Stats -->
+    <div id="overview-progress" class="overview-progress">
+
+      <p id="overview-total"></p>
+
+      <div class="overview-rarity-row">
+        <span class="rarity-icon" id="rarity-common-icon"></span>
+        <span class="rarity-label">Common</span>
+
+        <div class="rarity-bar">
+          <div id="rarity-common-fill" class="rarity-fill"></div>
+        </div>
+
+        <span id="rarity-common-text" class="rarity-text"></span>
       </div>
-      <span id="rarity-uncommon-text" class="rarity-text"></span>
+
+      <div class="overview-rarity-row">
+        <span class="rarity-icon" id="rarity-uncommon-icon"></span>
+        <span class="rarity-label">Uncommon</span>
+
+        <div class="rarity-bar">
+          <div id="rarity-uncommon-fill" class="rarity-fill"></div>
+        </div>
+
+        <span id="rarity-uncommon-text" class="rarity-text"></span>
+      </div>
+
+      <div class="overview-rarity-row">
+        <span class="rarity-icon" id="rarity-rare-icon"></span>
+        <span class="rarity-label">Rare</span>
+
+        <div class="rarity-bar">
+          <div id="rarity-rare-fill" class="rarity-fill"></div>
+        </div>
+
+        <span id="rarity-rare-text" class="rarity-text"></span>
+      </div>
+
     </div>
 
-    <div class="rarity-row">
-      <span class="rarity-icon" id="rarity-rare-icon"></span>
-      <span class="rarity-label">Rare</span>
-      <div class="rarity-bar">
-        <div id="rarity-rare-fill" class="rarity-fill"></div>
-      </div>
-      <span id="rarity-rare-text" class="rarity-text"></span>
+    <!-- Catch Subtitle -->
+    <h2 id="overview-catch-title" class="subtitle"></h2>
+
+    <!-- Catch Button -->
+    <div class="catch-images">
+      ./assets/logos/catch_open.png
     </div>
 
   </div>
 
-  <!-- Catch Subtitle -->
-  <h2 id="overview-catch-title" class="subtitle"></h2>
-
-  <!-- Catch Button -->
-  <div class="catch-images">
-    <img src="./assets/logos/catch_open.png" class="catch-image" id="catch-open-image">
-  </div>
-
-</div>
-
-  <!-- CARD VIEWER (SINGULAR COLLECTION VIEW) -->
+  <!-- CARD VIEWER -->
   <div id="card-viewer" class="card-viewer hidden">
 
     <button id="viewer-back-button" class="return-button">
@@ -108,54 +120,58 @@
 
     <h2 id="collection-title"></h2>
 
-    <!-- UPDATED: My Collection → My Pokedex -->
-    <!-- UPDATED: ID + class renamed -->
     <button id="viewer-pokedex-button" class="pokedex-button">
-      <img src="./assets/logos/pokedex.png" class="pokedex-icon">
+      ./assets/logos/pokedex.png
       My Pokedex
     </button>
 
     <div id="card-grid" class="card-grid"></div>
 
-    <!-- UPDATED: Reset My Collection → Reset My Pokedex -->
-    <!-- UPDATED: ID renamed -->
     <button id="reset-pokedex-button" class="reset-button">
       Reset My Pokedex
-    </>
+    </button>
+
   </div>
 
-  <!-- MY POKEDEX PAGE (formerly My Collections) -->
+  <!-- MY POKEDEX -->
   <div id="pokedex" class="pokedex hidden">
 
-    < id="mc-back-" class="return-button">
-      <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
+    <button id="mc-back-button" class="return-button">
+      ./assets/logos/Poke_Center.png
       Return to Poké‑Center
     </button>
 
-    <!-- UPDATED: My Collections → My Pokedex -->
     <h2>My Pokedex</h2>
 
-    <!-- UPDATED: ID + class renamed -->
     <div id="pokedex-grid" class="pokedex-grid"></div>
+
   </div>
 
   <!-- CARD MODAL -->
   <div id="card-modal" class="card-modal hidden">
+
     <div class="card-modal-content">
-      <button id="modal-close" class="modal-close-btn">✖</button>
-      <img id="modal-image" />
+
+      <button id="modal-close" class="modal-close-btn">
+        ✖
+      </button>
+
+      <img id="modal-image">
+
       <h3 id="modal-name"></h3>
 
+      <!-- Modal keeps original rarity-row -->
       <div id="modal-rarity" class="rarity-row">
         <span id="modal-rarity-icon"></span>
         <span id="modal-rarity-text"></span>
       </div>
+
     </div>
+
   </div>
 
-  <!-- JS -->
-  <!-- UPDATED: JS file remains same name -->
-  <script type="module" src="./js/collection-selector.js"></script>
+  <!-- JavaScript -->
+  ./js/collection-selector.jsscript>
 
 </body>
 </html>
