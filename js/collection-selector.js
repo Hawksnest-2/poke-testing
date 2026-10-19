@@ -245,9 +245,9 @@ async function enterCollectionOverview(collectionId) {
     }
   });
 
-  overviewStatsTitle.textContent = `Your ${collectionId} Collecton Statistics`;
+  overviewStatsTitle.textContent = `Your ${collectionMeta.name} Collecton Statistics`;
 
-  overviewCatchTitle.textContent = `Catch a Random Pokémon from ${collectionId} !!!`;
+  overviewCatchTitle.textContent = `Catch a Random Pokémon from ${collectionMeta.name} !!!`;
  
   overviewTotal.textContent = `Owned: ${ownedCount} / ${totalCards} cards`;
 
