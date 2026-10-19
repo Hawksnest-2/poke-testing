@@ -1,7 +1,19 @@
+/* collection-selector.js (UPDATED)
+   Terminology Refactor: "My Collections" → "My Pokedex"
+   Includes:
+   - Updated IDs
+   - Updated classes
+   - Updated screen names
+   - Updated function names
+   - Updated event listeners
+   - Updated reset button ID
+   - Comments explaining changes
+*/
+
 import { collections } from "./manifest.js";
 import { rarityLegend } from "./rarity.js";
 
-/* RARITY BUCKET CONFIG (3 buckets) */
+/* RARITY BUCKET CONFIG (unchanged) */
 const rarityConfig = {
   common: {
     icon: rarityLegend["Common"],
@@ -33,12 +45,17 @@ const rarityConfig = {
   }
 };
 
-const collectionCache = new Map(); // collectionId => cardData array
+/* CACHE + DOM REFERENCES */
+const collectionCache = new Map();
+
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
 const collectionOverview = document.getElementById("collection-overview");
 const cardViewer = document.getElementById("card-viewer");
-const myCollectionsPage = document.getElementById("my-collections");
+
+/* UPDATED: My Collections → My Pokedex */
+const pokedexPage = document.getElementById("pokedex");
+
 const cardModal = document.getElementById("card-modal");
 
 const overviewTitle = document.getElementById("overview-title");
@@ -63,16 +80,21 @@ const modalImage = document.getElementById("modal-image");
 const modalName = document.getElementById("modal-name");
 const modalClose = document.getElementById("modal-close");
 
-const myCollectionsButtonHome = document.getElementById("my-collections-button");
+/* UPDATED: My Collections → My Pokedex */
+const myPokedexButtonHome = document.getElementById("my-pokedex-button");
+
+/* UPDATED: My Collection → My Pokedex */
 const overviewBackButton = document.getElementById("overview-back-button");
-const overviewMyCollectionButton = document.getElementById("overview-my-collection-button");
+const overviewPokedexButton = document.getElementById("overview-pokedex-button");
 const viewerBackButton = document.getElementById("viewer-back-button");
-const viewerMyCollectionButton = document.getElementById("viewer-my-collection-button");
+const viewerPokedexButton = document.getElementById("viewer-pokedex-button");
+
 const mcBackButton = document.getElementById("mc-back-button");
 
 const catchOpenImageOverview = document.getElementById("catch-open-image");
 
-const myCollectionsGrid = document.getElementById("my-collections-grid");
+/* UPDATED: My Collections → My Pokedex */
+const pokedexGrid = document.getElementById("pokedex-grid");
 
 /* STATE */
 let currentCollectionId = null;
@@ -102,13 +124,13 @@ function loadOwnedCards() {
   }
 }
 
-
+/* UPDATED: Screen name "myCollections" → "pokedex" */
 function showScreen(screen) {
   mainHeader.classList.add("hidden");
   collectionSelector.classList.add("hidden");
   collectionOverview.classList.add("hidden");
   cardViewer.classList.add("hidden");
-  myCollectionsPage.classList.add("hidden");
+  pokedexPage.classList.add("hidden");
 
   switch (screen) {
     case "home":
@@ -121,22 +143,19 @@ function showScreen(screen) {
     case "viewer":
       cardViewer.classList.remove("hidden");
       break;
-    case "myCollections":
-      myCollectionsPage.classList.remove("hidden");
+    case "pokedex":   // UPDATED
+      pokedexPage.classList.remove("hidden");
       break;
   }
 }
 
 async function loadCollectionData(collectionId) {
-  // Return cached data if available
   if (collectionCache.has(collectionId)) {
     return collectionCache.get(collectionId);
   }
 
-  // Load module
   const module = await import(`../collections/${collectionId}/cardData.js`);
 
-  // Normalize all possible export shapes
   let data = null;
 
   if (Array.isArray(module.default)) data = module.default;
@@ -156,9 +175,7 @@ async function loadCollectionData(collectionId) {
     data = [];
   }
 
-  // Cache it
   collectionCache.set(collectionId, data);
-
   return data;
 }
 
@@ -241,7 +258,7 @@ async function enterCollectionOverview(collectionId) {
   setRarityRow(rarityCounts.rare, rarityRareFill, rarityRareText);
 }
 
-/* MY COLLECTION VIEWER */
+/* CARD VIEWER */
 function renderCardViewer() {
   if (!currentCollectionData || !currentCollectionId) return;
 
@@ -301,20 +318,18 @@ function renderCardViewer() {
 
 /* MODAL */
 function openCardModal(card, isOwned) {
-  // Track which card is currently open
   currentModalCard = card;
-  // Determine correct image (front if owned, back if not)
+
   const imgSrc = isOwned
     ? `/poke-testing/collections/${currentCollectionId}/${card.file}`
     : `/poke-testing/assets/logos/cardback.jpg`;
 
   modalImage.src = imgSrc;
   modalName.textContent = card.name || "";
-document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
-document.getElementById("modal-rarity-text").textContent = card.rarity;
 
+  document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
+  document.getElementById("modal-rarity-text").textContent = card.rarity;
 
-  // Apply rarity-colored border
   const content = cardModal.querySelector(".card-modal-content");
   content.classList.remove("rarity-common", "rarity-uncommon", "rarity-rare");
 
@@ -326,24 +341,20 @@ document.getElementById("modal-rarity-text").textContent = card.rarity;
     content.classList.add("rarity-rare");
   }
 
-  // Show modal
   cardModal.classList.remove("hidden");
 }
 
 function closeCardModal() {
-  // Hide modal
   cardModal.classList.add("hidden");
 
-  // Reset pinch zoom state
   modalImage.style.transform = "";
   scale = 1;
   startDistance = 0;
 
-  // Clear current modal card reference
   currentModalCard = null;
 }
 
-/* Reset Collection LOGIC */
+/* UPDATED: Reset My Collection → Reset My Pokedex */
 function resetCurrentCollection() {
   if (!currentCollectionId) return;
 
@@ -360,12 +371,10 @@ function resetCurrentCollection() {
   renderCardViewer();
 }
 
-
 /* CATCH LOGIC */
 function catchRandomPokemon() {
   if (!currentCollectionData || !currentCollectionId) return;
 
-  // Find all unowned cards
   const unowned = currentCollectionData.filter(card => {
     const key = `${currentCollectionId}:${card.cardNumber}`;
     return ownedCards.get(key) !== true;
@@ -376,26 +385,19 @@ function catchRandomPokemon() {
     return;
   }
 
-  // Pick a random unowned card
   const randomCard = unowned[Math.floor(Math.random() * unowned.length)];
   const key = `${currentCollectionId}:${randomCard.cardNumber}`;
 
-  // Mark it owned
   ownedCards.set(key, true);
-
   saveOwnedCards();
 
+  const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
+  modalImage.src = imgSrc;
+  modalName.textContent = randomCard.name || "";
 
-// Prepare modal content
-const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
-modalImage.src = imgSrc;
-modalName.textContent = randomCard.name || "";
+  document.getElementById("modal-rarity-icon").textContent = rarityLegend[randomCard.rarity];
+  document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
 
-document.getElementById("modal-rarity-icon").textContent = rarityLegend[randomCard.rarity];
-document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
-
-
-  // Apply rarity border
   const content = cardModal.querySelector(".card-modal-content");
   content.classList.remove("rarity-common", "rarity-uncommon", "rarity-rare");
 
@@ -407,36 +409,29 @@ document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
     content.classList.add("rarity-rare");
   }
 
-  // Track which card is open in modal (for  navigation)
   currentModalCard = randomCard;
 
-  // Show modal
   cardModal.classList.remove("hidden");
 
-  // Tell modalClose handler to refresh viewer once
   pendingCatchRefresh = true;
-
 }
 
-
-/* MY COLLECTIONS (PLURAL) */
-async function renderMyCollectionsPage() {
-  myCollectionsGrid.innerHTML = "";
+/* UPDATED: My Collections → My Pokedex */
+/* UPDATED: Function renamed */
+async function renderPokedexPage() {
+  pokedexGrid.innerHTML = "";
 
   for (const col of collections) {
     const data = await loadCollectionData(col.id);
 
-    // Count owned cards instantly
     let ownedCount = 0;
     for (const card of data) {
       const key = `${col.id}:${card.cardNumber}`;
       if (ownedCards.get(key) === true) ownedCount++;
     }
 
-    // Skip collections with no owned cards
     if (ownedCount === 0) continue;
 
-    // Build tile
     const tile = document.createElement("div");
     tile.className = "mc-tile";
 
@@ -461,21 +456,24 @@ async function renderMyCollectionsPage() {
       renderCardViewer();
     });
 
-    myCollectionsGrid.appendChild(tile);
+    pokedexGrid.appendChild(tile);
   }
 }
 
 /* EVENTS */
-myCollectionsButtonHome.addEventListener("click", () => {
-  renderMyCollectionsPage();
-  showScreen("myCollections");
+
+/* UPDATED: My Collections → My Pokedex */
+myPokedexButtonHome.addEventListener("click", () => {
+  renderPokedexPage();
+  showScreen("pokedex");
 });
 
 overviewBackButton.addEventListener("click", () => {
   showScreen("home");
 });
 
-overviewMyCollectionButton.addEventListener("click", () => {
+/* UPDATED: My Collection → My Pokedex */
+overviewPokedexButton.addEventListener("click", () => {
   renderCardViewer();
 });
 
@@ -483,7 +481,8 @@ viewerBackButton.addEventListener("click", () => {
   enterCollectionOverview(currentCollectionId);
 });
 
-viewerMyCollectionButton.addEventListener("click", () => {
+/* UPDATED: My Collection → My Pokedex */
+viewerPokedexButton.addEventListener("click", () => {
   renderCardViewer();
 });
 
@@ -500,11 +499,10 @@ modalClose.addEventListener("click", () => {
   }
 });
 
-/* Catch images */
 catchOpenImageOverview.addEventListener("click", catchRandomPokemon);
 
-/* Reset My Collection */
-document.getElementById("reset-my-collection-button")
+/* UPDATED: Reset My Collection → Reset My Pokedex */
+document.getElementById("reset-pokedex-button")
   .addEventListener("click", resetCurrentCollection);
 
 /* PINCH ZOOM */
