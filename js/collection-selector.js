@@ -214,6 +214,9 @@ async function enterCollectionOverview(collectionId) {
   const collectionMeta = collections.find(c => c.id === collectionId);
   overviewTitle.textContent = collectionMeta ? collectionMeta.name : collectionId;
 
+   // ⭐ FIX: Set the collection logo under the title
+     document.getElementById("overview-logo").src = `/poke-testing/assets/logos/${collectionMeta.logo}`;
+   
   const totalCards = currentCollectionData.length;
   let ownedCount = 0;
 
