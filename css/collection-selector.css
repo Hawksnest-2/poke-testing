@@ -1,8 +1,3 @@
-/* css/collection-selector.css (UPDATED)
-   Terminology Refactor: "My Collections" → "My Pokedex"
-   Includes UI upgrades, spacing improvements, and renamed classes.
-*/
-
 /* GLOBAL */
 body {
   background: #0f0f0f;
@@ -12,7 +7,7 @@ body {
   padding: 0;
 }
 
-/* MAIN TITLE WITH LOGOS */
+/* MAIN PAGE */
 .main-title {
   display: flex;
   flex-direction: column;   /* centered vertical layout */
@@ -20,6 +15,7 @@ body {
   gap: 8px;
 }
 
+/* Large Pokecenter Logo on MAIN PAGE */
 .pc-logo {
   width: 240px;   /* doubled size */
   height: auto;
@@ -128,22 +124,46 @@ body {
   margin-bottom: 10px;
 }
 
-/* UPDATED: My Collection → My Pokedex */
-/* UPDATED: class renamed from .my-collection-button */
+
+/* Main and Collection Overview screens Pokedex button */
 .pokedex-button {
   background: #222;
   color: #fff;
-  padding: 16px 24px;       /* matches Return button */
+  padding: 20px 24px;
   border-radius: 10px;
   border: none;
-  cursor: pointer;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;  
   align-items: center;
-  gap: 10px;
-  margin: 10px auto 10px auto;
-  font-size: 1.4rem;
+  justify-content: center;
+  gap: 8px;             
+  font-size: clamp(1.2rem, 5vw, 1.8rem); 
+  transition: background 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent; 
 }
+
+.pokedex-button:active {
+  background: #444;       /* Darkens/lightens to show a press */
+  transform: scale(0.97); /* Shrinks slightly to feel like a real button */
+}
+
+/* Pokedex icon (main screen and collection overview) */
+.pokedex-icon {
+  width: 150px;   
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* SMALL ICON FOR BACK BUTTONS */
+.pc-icon-small {
+  width: 150px;   
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+
 
 /* CATCH ICON AREA */
 .catch-images {
@@ -210,38 +230,6 @@ body {
 .rarity-text {
   font-size: 1.7rem;
   color: #ccc;
-}
-
-/* SMALL ICON FOR BACK BUTTONS */
-.pc-icon-small {
-  width: 150px;   
-  height: auto;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-/* Main screen Pokedex button */
-.pokedex-button {
-  background: #222;
-  color: #fff;
-  padding: 20px 24px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;   /* image above text */
-  align-items: center;
-  justify-content: center;
-  gap: 8px;                 /* spacing between image and text */
-  font-size: 2rem;          /* text 2× larger */
-}
-
-/* Pokedex icon (main screen) */
-.pokedex-icon {
-  width: 96px;              /* 3× larger */
-  height: auto;
-  display: block;
-  margin: 0 auto;
 }
 
 
