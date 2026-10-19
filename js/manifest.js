@@ -1,3 +1,8 @@
+/* manifest.js (UNCHANGED)
+   No terminology changes required.
+   Collection IDs, names, and logos remain exactly the same.
+*/
+
 export const collections = [
   { id: "01_Scarlet_Violet", name: "Scarlet & Violet", logo: "01_Scarlet_Violet_logo.png" },
   { id: "02_SV_Paldea_Evolved", name: "Paldea Evolved", logo: "02_SV_Paldea_Evolved_logo.png" },
