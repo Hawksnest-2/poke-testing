@@ -86,7 +86,7 @@ const modalClose = document.getElementById("modal-close");
 const myPokedexButtonHome = document.getElementById("my-pokedex-button");
 
 /* UPDATED: My Collection → My Pokedex */
-const overviewBackButton = document.getElementById("overview-back-button");
+const overviewReturnButton = document.getElementById("overview-return-button");
 const overviewPokedexButton = document.getElementById("overview-pokedex-button");
 const viewerBackButton = document.getElementById("viewer-back-button");
 const viewerPokedexButton = document.getElementById("viewer-pokedex-button");
