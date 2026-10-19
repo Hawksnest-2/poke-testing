@@ -1,22 +1,33 @@
-/* css/my-collections.css */
-.my-collections {
+/* css/my-pokedex.css (UPDATED & RENAMED)
+   Terminology Refactor: "My Collections" → "My Pokedex"
+   All classes, IDs, and UI elements updated to match new terminology.
+   This file replaces: css/my-collections.css
+*/
+
+/* MAIN POKEDEX PAGE WRAPPER */
+/* UPDATED: .my-collections → .pokedex */
+.pokedex {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.my-collections h2 {
+/* PAGE TITLE */
+.pokedex h2 {
   text-align: center;
   margin-bottom: 10px;
+  font-size: 2.4rem;   /* upgraded size */
 }
 
-.my-collections-grid {
+/* UPDATED: .my-collections-grid → .pokedex-grid */
+.pokedex-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 24px;
   margin-top: 20px;
 }
 
+/* TILE FOR EACH COLLECTION WITH OWNED CARDS */
 .mc-tile {
   background: #1a1a1a;
   border-radius: 14px;
@@ -41,15 +52,15 @@
 .mc-progress {
   margin-top: 10px;
   color: #ccc;
-  font-size: 0.9rem;
+  font-size: 1.1rem;   /* slightly larger */
 }
 
-/* Back button reused */
+/* BACK BUTTON (shared across pages) */
 .back-button {
   background: #222;
   color: #fff;
-  padding: 16px 24px;
-  font-size: 1.4rem;
+  padding: 16px 24px;      /* upgraded to match overview buttons */
+  font-size: 1.4rem;       /* upgraded size */
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -58,8 +69,8 @@
   align-items: center;
 }
 
+/* Pokedex icon (used on home page button) */
 .pokedex-icon {
   width: 32px;
   height: auto;
 }
-
