@@ -115,14 +115,14 @@ body {
 }
 
 /* Center the stats subtitle */
-#overview-stats-title {
+.overview-stats-title {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 /* Center the catch subtitle */
-#overview-catch-title {
+.overview-catch-title {
   text-align: center;
   margin-top: 30px;
   margin-bottom: 10px;
