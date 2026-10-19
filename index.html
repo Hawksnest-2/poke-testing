@@ -1,14 +1,18 @@
-<!-- index.html -->
+<!-- index.html (UPDATED)
+     Terminology Refactor: "My Collections" → "My Pokedex"
+     Includes UI upgrades, icon additions, spacing improvements, and renamed CSS file.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Poké‑Center</title>
 
-  <!-- CSS -->
+  <!-- UPDATED CSS FILENAMES -->
   <link rel="stylesheet" href="./css/collection-selector.css">
   <link rel="stylesheet" href="./css/card-viewer.css">
-  <link rel="stylesheet" href="./css/my-collections.css">
+  <link rel="stylesheet" href="./css/my-pokedex.css"> <!-- renamed -->
 </head>
 
 <body>
@@ -16,14 +20,17 @@
   <!-- MAIN HEADER (HOME ONLY) -->
   <div id="main-header">
     <div class="main-title">
-  <img src="./assets/logos/Poke_Center.png" class="pc-logo">
-  <h1 class="title">Poké‑Center</h1>
-</div>
+      <img src="./assets/logos/Poke_Center.png" class="pc-logo">
+      <h1 class="title">Poké‑Center</h1>
+    </div>
 
-<button id="my-collections-button" class="my-collections-button">
-  <img src="./assets/icons/pokedex.png" class="pokedex-icon">
-  My Pokedex
-</button>
+    <!-- UPDATED: My Collections → My Pokedex -->
+    <!-- UPDATED: ID + class renamed -->
+    <button id="my-pokedex-button" class="my-pokedex-button">
+      <!-- UPDATED: Pokedex icon -->
+      <img src="./assets/icons/pokedex.png" class="pokedex-icon">
+      My Pokedex
+    </button>
 
     <h2 class="subtitle">Select a Collection</h2>
   </div>
@@ -31,28 +38,38 @@
   <!-- COLLECTION SELECTOR SCREEN (HOME) -->
   <div id="collection-selector" class="collection-selector"></div>
 
-<div id="collection-overview" class="collection-overview hidden">
+  <!-- COLLECTION OVERVIEW SCREEN -->
+  <div id="collection-overview" class="collection-overview hidden">
 
-  <div class="overview-header">
-    <button id="overview-back-button" class="back-button">
-      <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
-      Return to Poké‑Center
-    </button>
+    <!-- UPDATED: Overview header wrapper for left/right alignment -->
+    <div class="overview-header">
 
-    <button id="overview-my-collection-button" class="my-collection-button">
-      <img src="./assets/icons/binder.png" class="binder-icon">
-      My Collection
-    </button>
-  </div>
+      <!-- Return to Poké‑Center button (unchanged except size handled in CSS) -->
+      <button id="overview-back-button" class="back-button">
+        <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
+        Return to Poké‑Center
+      </button>
 
-  <h2 id="overview-title" class="overview-title"></h2>
+      <!-- UPDATED: My Collection → My Pokedex -->
+      <!-- UPDATED: ID + class renamed -->
+      <button id="overview-pokedex-button" class="pokedex-button">
+        <img src="./assets/icons/binder.png" class="binder-icon">
+        My Pokedex
+      </button>
+    </div>
 
-  <img id="overview-logo" class="overview-logo">
+    <!-- Collection Name (doubled size in CSS) -->
+    <h2 id="overview-title" class="overview-title"></h2>
 
-  <div class="catch-images">
-    <img src="./assets/logos/catch_open.png" class="catch-image" id="catch-open-image">
-  </div>
+    <!-- NEW: Collection logo displayed under title -->
+    <img id="overview-logo" class="overview-logo">
 
+    <!-- Catch icon -->
+    <div class="catch-images">
+      <img src="./assets/logos/catch_open.png" class="catch-image" id="catch-open-image">
+    </div>
+
+    <!-- Collection Stats (doubled size in CSS) -->
     <div id="overview-progress" class="overview-progress">
       <p id="overview-total"></p>
 
@@ -85,50 +102,62 @@
     </div>
   </div>
 
-  <!-- MY COLLECTION (SINGULAR) VIEWER -->
+  <!-- CARD VIEWER (SINGULAR COLLECTION VIEW) -->
   <div id="card-viewer" class="card-viewer hidden">
+
     <button id="viewer-back-button" class="back-button">
       Return to Collection
     </button>
 
     <h2 id="collection-title"></h2>
 
-    <button id="viewer-my-collection-button" class="my-collection-button">
-      My Collection
+    <!-- UPDATED: My Collection → My Pokedex -->
+    <!-- UPDATED: ID + class renamed -->
+    <button id="viewer-pokedex-button" class="pokedex-button">
+      <img src="./assets/icons/binder.png" class="binder-icon">
+      My Pokedex
     </button>
 
     <div id="card-grid" class="card-grid"></div>
 
-    <button id="reset-my-collection-button" class="reset-button">
-      Reset My Collection
+    <!-- UPDATED: Reset My Collection → Reset My Pokedex -->
+    <!-- UPDATED: ID renamed -->
+    <button id="reset-pokedex-button" class="reset-button">
+      Reset My Pokedex
     </button>
-
   </div>
 
-  <!-- MY COLLECTIONS (PLURAL) PAGE -->
-  <div id="my-collections" class="my-collections hidden">
+  <!-- MY POKEDEX PAGE (formerly My Collections) -->
+  <div id="pokedex" class="pokedex hidden">
+
     <button id="mc-back-button" class="back-button">
       <img src="./assets/logos/Poke_Center.png" class="pc-icon-small">
       Return to Poké‑Center
     </button>
-    <h2>My Collections</h2>
-    <div id="my-collections-grid" class="my-collections-grid"></div>
+
+    <!-- UPDATED: My Collections → My Pokedex -->
+    <h2>My Pokedex</h2>
+
+    <!-- UPDATED: ID + class renamed -->
+    <div id="pokedex-grid" class="pokedex-grid"></div>
   </div>
 
-<!-- CARD MODAL -->
-<div id="card-modal" class="card-modal hidden">
-  <div class="card-modal-content">
-    <button id="modal-close" class="modal-close-btn">✖</button>
-    <img id="modal-image" />
-    <h3 id="modal-name"></h3>
-   <div id="modal-rarity" class="rarity-row">
-      <span id="modal-rarity-icon"></span>
-      <span id="modal-rarity-text"></span>
-   </div>
+  <!-- CARD MODAL -->
+  <div id="card-modal" class="card-modal hidden">
+    <div class="card-modal-content">
+      <button id="modal-close" class="modal-close-btn">✖</button>
+      <img id="modal-image" />
+      <h3 id="modal-name"></h3>
+
+      <div id="modal-rarity" class="rarity-row">
+        <span id="modal-rarity-icon"></span>
+        <span id="modal-rarity-text"></span>
+      </div>
+    </div>
   </div>
-</div>
 
   <!-- JS -->
+  <!-- UPDATED: JS file remains same name -->
   <script type="module" src="./js/collection-selector.js"></script>
 
 </body>
