@@ -22,8 +22,8 @@ SHARED BUTTONS & ICONS
 .pokedex-button {
   background: #222;
   color: #fff;
-  padding: 20px 24px;
-  border-radius: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
 
@@ -72,16 +72,25 @@ SHARED BUTTONS & ICONS
 /*************************************************
 HOME PAGE
 *************************************************/
+#main-header {
+  display: flex;
+  flex-direction: column;   /* Stacks the 3 main sections vertically */
+  align-items: center;      /* Centers all 3 sections horizontally */
+  text-align: center;       /* Ensures text inside headings is centered */
+  gap: 12px;                /* Adds spacing between the 3 main sections */
+  width: 100%;
+}
 
 .main-title {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
 .main-logo {
-    max-width: 300px;
+    max-width: 250px;
     width: 100%;
     height: auto;
     display: block;
@@ -95,7 +104,7 @@ HOME PAGE
 
 .title {
   text-align: center;
-  font-size: 4.8rem;
+  font-size: 2.4rem;
   letter-spacing: 1px;
 }
 
