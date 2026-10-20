@@ -470,6 +470,8 @@ PINCH ZOOM
 ******************************************************************************/
 let scale = 1;
 let startDistance = 0;
+let translateX = 0;
+let translateY = 0;
 modalImage.addEventListener("touchmove", e => {
     if (e.touches.length === 2) {
         const [t1, t2] = e.touches;
