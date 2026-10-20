@@ -62,7 +62,7 @@ DOM REFERENCES
 /* Home */
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
-const myPokedexButtonHome = document.getElementById("my-pokedex-button");
+const myPokedexButtonHome = document.getElementById("home-pokedex-button");
 /* Collection Overview */
 const collectionOverview = document.getElementById("collection-overview");
 const overviewTitle = document.getElementById("overview-title");
@@ -85,7 +85,7 @@ const rarityRareText = document.getElementById("rarity-rare-text");
 /* Card Viewer */
 const cardViewer = document.getElementById("card-viewer");
 const collectionTitle = document.getElementById("collection-title");
-const viewerReturnButton = document.getElementById("viewer-return-button");
+const viewerReturnButton = document.getElementById("viewer-home-return-button");
 const viewerPokedexButton = document.getElementById("viewer-pokedex-button");
 const cardGrid = document.getElementById("card-grid");
 /* My Pokedex */
@@ -442,6 +442,11 @@ viewerPokedexButton.addEventListener("click", () => {
 /* My Pokedex */
 pokedexReturnButton.addEventListener("click", () => {
     showScreen("home");
+});
+/* My Pokedex Page View Button */
+document.getElementById("pokedex-view-button").addEventListener("click", () => {
+    renderPokedexPage();
+    showScreen("pokedex");
 });
 /* Modal */
 modalClose.addEventListener("click", () => {
