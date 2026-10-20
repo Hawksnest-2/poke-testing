@@ -77,6 +77,14 @@ HOME PAGE
   gap: 8px;
 }
 
+.main-logo {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 .pc-logo {
   width: 240px;
   height: auto;
