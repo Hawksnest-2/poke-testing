@@ -65,9 +65,9 @@ SHARED BUTTONS & ICONS
 }
 
 .button-icon {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
+    width: 64px;
+    height: auto;
+    display: block;
 }
 
 /*************************************************
