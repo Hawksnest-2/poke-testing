@@ -20,6 +20,8 @@ SHARED BUTTONS & ICONS
 
 .return-button,
 .pokedex-button {
+  background-color: transparent;
+  color: #ffffff;
   padding: 5px 10px;
   border-radius: 8px;
   border: none;
