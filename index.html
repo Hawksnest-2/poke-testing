@@ -1,324 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-
     <title>Poké‑Center</title>
-
     <link rel="stylesheet"
           href="./css/styles.css">
-
 </head>
-
 <body>
-
     <!-- ==========================================
          HOME PAGE
          ========================================== -->
-
     <div id="main-header">
-
         <div class="main-title">
-
             <img
                 src="./assets/logos/Poke_Center.png"
                 alt="Poké‑Center"
                 class="main-logo"
             >
-
             <h1 class="title">
                 Poké‑Center
             </h1>
-
         </div>
-
         <button id="my-pokedex-button"
                 class="pokedex-button">
-
             <img
                 src="./assets/logos/pokedex.png"
                 alt="Pokedex"
                 class="button-icon"
             >
-
             My Pokedex
-
         </button>
-
         <h2 class="subtitle">
             Select a Collection
         </h2>
-
     </div>
-
     <div id="collection-selector"
          class="collection-selector">
     </div>
-
     <!-- ==========================================
          COLLECTION OVERVIEW PAGE
          ========================================== -->
-
     <div id="collection-overview"
          class="collection-overview hidden">
-
         <div class="overview-header">
-
             <button id="overview-return-button"
                     class="return-button">
-
                 <img
                     src="./assets/logos/Poke_Center.png"
                     alt="Home"
                     class="button-icon"
                 >
-
                 Return to Poké‑Center
-
             </button>
-
             <button id="overview-pokedex-button"
                     class="pokedex-button">
-
                 <img
                     src="./assets/logos/pokedex.png"
                     alt="Pokedex"
                     class="button-icon"
                 >
-
                 My Pokedex
-
             </button>
-
         </div>
-
         <h2 id="overview-title"
             class="overview-title">
         </h2>
-
         <img id="overview-logo"
              class="overview-logo"
              alt="Collection Logo">
-
         <h2 id="overview-stats-title"
             class="subtitle">
         </h2>
-
-<div id="overview-progress"
+        <div id="overview-progress"
              class="overview-progress">
-
             <p id="overview-total">
             </p>
-
             <div class="overview-rarity-row">
-
                 <span class="rarity-icon"
                       id="rarity-common-icon">
                 </span>
-
                 <span class="rarity-label">
                     Common
                 </span>
-
                 <div class="rarity-bar">
                     <div id="rarity-common-fill"
                          class="rarity-fill">
                     </div>
                 </div>
-
                 <span id="rarity-common-text"
                       class="rarity-text">
                 </span>
-
             </div>
-
             <div class="overview-rarity-row">
-
                 <span class="rarity-icon"
                       id="rarity-uncommon-icon">
                 </span>
-
                 <span class="rarity-label">
                     Uncommon
                 </span>
-
                 <div class="rarity-bar">
                     <div id="rarity-uncommon-fill"
                          class="rarity-fill">
                     </div>
                 </div>
-
                 <span id="rarity-uncommon-text"
                       class="rarity-text">
                 </span>
-
             </div>
-
             <div class="overview-rarity-row">
-
                 <span class="rarity-icon"
                       id="rarity-rare-icon">
                 </span>
-
                 <span class="rarity-label">
                     Rare
                 </span>
-
                 <div class="rarity-bar">
                     <div id="rarity-rare-fill"
                          class="rarity-fill">
                     </div>
                 </div>
-
                 <span id="rarity-rare-text"
                       class="rarity-text">
                 </span>
-
             </div>
-
         </div>
-
         <h2 id="overview-catch-title"
             class="subtitle">
         </h2>
-
         <div class="catch-images">
-
             <img
                 id="catch-open-image"
                 src="./assets/logos/catch_open.png"
                 alt="Catch Pokémon"
                 class="catch-image"
             >
-
         </div>
-
     </div>
-
     <!-- ==========================================
          CARD VIEWER PAGE
          ========================================== -->
-
     <div id="card-viewer"
          class="card-viewer hidden">
-
         <button id="viewer-return-button"
                 class="return-button">
-
             Return to Collection
-
         </button>
-
         <h2 id="collection-title">
         </h2>
-
         <button id="viewer-pokedex-button"
                 class="pokedex-button">
-
             <img
                 src="./assets/logos/pokedex.png"
                 alt="Pokedex"
                 class="button-icon"
             >
-
             My Pokedex
-
         </button>
-
         <div id="card-grid"
              class="card-grid">
         </div>
-
         <button id="reset-pokedex-button"
                 class="reset-button">
-
             Reset My Pokedex
-
         </button>
-
     </div>
-
-
-<!-- ==========================================
+    <!-- ==========================================
          MY POKEDEX PAGE
          ========================================== -->
-
     <div id="pokedex"
          class="pokedex hidden">
-
         <button id="pokedex-return-button"
                 class="return-button">
-
             <img
                 src="./assets/logos/Poke_Center.png"
                 alt="Home"
                 class="button-icon"
             >
-
             Return to Poké‑Center
-
         </button>
-
         <h2>
             My Pokedex
         </h2>
-
         <div id="pokedex-grid"
              class="pokedex-grid">
         </div>
-
     </div>
-
     <!-- ==========================================
          CARD MODAL
          ========================================== -->
-
     <div id="card-modal"
          class="card-modal hidden">
-
         <div class="card-modal-content">
-
             <button id="modal-close"
                     class="modal-close-btn">
-
                 ✖
-
             </button>
-
             <img id="modal-image"
                  alt="Pokemon Card">
-
             <h3 id="modal-name">
             </h3>
-
             <div id="modal-rarity"
                  class="rarity-row">
-
                 <span id="modal-rarity-icon">
                 </span>
-
                 <span id="modal-rarity-text">
                 </span>
-
             </div>
-
         </div>
-
     </div>
-
     <!-- ==========================================
          JAVASCRIPT
          ========================================== -->
-
     <script
         type="module"
         src="./js/poke-center.js"
     ></script>
 </body>
 </html>
-
-
-
