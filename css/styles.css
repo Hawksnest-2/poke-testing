@@ -261,6 +261,8 @@ CATCH SECTION
 }
 
 .catch-image {
+  background-color: transparent;
+  color: #ffffff;
   border: none;
   display: block;
   width: 320px;
