@@ -20,7 +20,6 @@ SHARED BUTTONS & ICONS
 *************************************************/
 
 .return-button,
-.back-button,
 .pokedex-button {
   background: #222;
   color: #fff;
@@ -46,7 +45,6 @@ SHARED BUTTONS & ICONS
 }
 
 .return-button:active,
-.back-button:active,
 .pokedex-button:active {
   background: #444;
   transform: scale(0.97);
