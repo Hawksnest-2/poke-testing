@@ -85,7 +85,8 @@ const rarityRareText = document.getElementById("rarity-rare-text");
 /* Card Viewer */
 const cardViewer = document.getElementById("card-viewer");
 const collectionTitle = document.getElementById("collection-title");
-const viewerReturnButton = document.getElementById("viewer-home-return-button");
+const viewerReturnButton = document.getElementById("viewer-return-button");
+const viewerHomeReturnButton = document.getElementById("viewer-home-return-button");
 const viewerPokedexButton = document.getElementById("viewer-pokedex-button");
 const cardGrid = document.getElementById("card-grid");
 /* My Pokedex */
@@ -428,6 +429,9 @@ overviewPokedexButton.addEventListener("click", () => {
 });
 /* Card Viewer */
 viewerReturnButton.addEventListener("click", () => {
+    enterCollectionOverview(currentCollectionId);
+});
+viewerHomeReturnButton.addEventListener("click", () => {
     enterCollectionOverview(currentCollectionId);
 });
 /*
