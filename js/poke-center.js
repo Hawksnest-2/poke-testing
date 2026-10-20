@@ -275,6 +275,7 @@ function renderCardViewer() {
     showScreen("viewer");
     const collectionMeta = collections.find(c => c.id === currentCollectionId);
     collectionTitle.textContent = collectionMeta ? collectionMeta.name : currentCollectionId;
+	document.getElementById("viewer-logo").src = `/poke-testing/assets/logos/${collectionMeta.logo}`;
     cardGrid.innerHTML = "";
     currentCollectionData.forEach(card => {
         const key = `${currentCollectionId}:${card.cardNumber}`;
