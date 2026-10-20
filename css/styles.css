@@ -20,9 +20,7 @@ SHARED BUTTONS & ICONS
 
 .return-button,
 .pokedex-button {
-  background: #222;
-  color: #fff;
-  padding: 10px 20px;
+  padding: 5px 10px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -50,23 +48,24 @@ SHARED BUTTONS & ICONS
 }
 
 .pokedex-icon {
-  width: 150px;
+  width: 75px;
   height: auto;
   display: block;
   margin: 0 auto;
 }
 
 .pc-icon-small {
-  width: 150px;
+  width: 75px;
   height: auto;
   display: block;
   margin: 0 auto;
 }
 
-.button-icon {
-    width: 64px;
-    height: auto;
-    display: block;
+.collection-icon-small {
+  width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 /*************************************************
@@ -90,7 +89,7 @@ HOME PAGE
 }
 
 .main-logo {
-    max-width: 250px;
+    max-width: 200px;
     width: 100%;
     height: auto;
     display: block;
