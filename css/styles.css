@@ -66,6 +66,12 @@ SHARED BUTTONS & ICONS
   margin: 0 auto;
 }
 
+.button-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
 /*************************************************
 HOME PAGE
 *************************************************/
