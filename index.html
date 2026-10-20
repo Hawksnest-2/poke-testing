@@ -28,7 +28,7 @@
             <img
                 src="./assets/logos/pokedex.png"
                 alt="Pokedex"
-                class="button-icon"
+                class="pokedex-icon"
             >
             My Pokedex
         </button>
@@ -50,7 +50,7 @@
                 <img
                     src="./assets/logos/Poke_Center.png"
                     alt="Home"
-                    class="button-icon"
+                    class="pc-icon-small"
                 >
                 Return to Poké‑Center
             </button>
@@ -59,7 +59,7 @@
                 <img
                     src="./assets/logos/pokedex.png"
                     alt="Pokedex"
-                    class="button-icon"
+                    class="pokedex-icon"
                 >
                 My Pokedex
             </button>
@@ -144,21 +144,35 @@
          ========================================== -->
     <div id="card-viewer"
          class="card-viewer hidden">
+		<button id="pokedex-return-button"
+                    class="return-button">
+                <img
+                    src="./assets/logos/Poke_Center.png"
+                    alt="Home"
+                    class="pc-icon-small"
+                >
+                Poké‑Center
+            </button>
+        <button id="overview-pokedex-button"
+                    class="pokedex-button">
+                <img
+                    src="./assets/logos/pokedex.png"
+                    alt="Pokedex"
+                    class="pokedex-icon"
+                >
+                My Pokedex
+            </button>
         <button id="viewer-return-button"
-                class="return-button">
-            Return to Collection
+                    class="return-button">
+               <img id="overview-logo"
+                    src=""
+                    alt="Collection Logo"
+			        class="collection-icon-small"
+                >
+		     	Return to Collection
         </button>
         <h2 id="collection-title">
         </h2>
-        <button id="viewer-pokedex-button"
-                class="pokedex-button">
-            <img
-                src="./assets/logos/pokedex.png"
-                alt="Pokedex"
-                class="button-icon"
-            >
-            My Pokedex
-        </button>
         <div id="card-grid"
              class="card-grid">
         </div>
@@ -170,24 +184,34 @@
     <!-- ==========================================
          MY POKEDEX PAGE
          ========================================== -->
-    <div id="pokedex"
+	<div id="pokedex"
          class="pokedex hidden">
-        <button id="pokedex-return-button"
-                class="return-button">
-            <img
-                src="./assets/logos/Poke_Center.png"
-                alt="Home"
-                class="button-icon"
-            >
-            Return to Poké‑Center
-        </button>
-        <h2>
-            My Pokedex
-        </h2>
-        <div id="pokedex-grid"
+            <button id="pokedex-return-button"
+                    class="return-button">
+                <img
+                    src="./assets/logos/Poke_Center.png"
+                    alt="Home"
+                    class="pc-icon-small"
+                >
+                Poké‑Center
+            </button>
+            <button id="overview-pokedex-button"
+                    class="pokedex-button">
+                <img
+                    src="./assets/logos/pokedex.png"
+                    alt="Pokedex"
+                    class="pokedex-icon"
+                >
+                My Pokedex
+            </button>
+		<div id="pokedex-grid"
              class="pokedex-grid">
         </div>
     </div>
+	
+	
+	
+	
     <!-- ==========================================
          CARD MODAL
          ========================================== -->
