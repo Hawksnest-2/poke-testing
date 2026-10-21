@@ -467,18 +467,24 @@ function catchRandomPokemon() {
     if (!currentCollectionData || !currentCollectionId) {
         return;
     }
-
     const randomCard = currentCollectionData[Math.floor(Math.random() * currentCollectionData.length)];
-    const key = `${currentCollectionId}:${randomCard.cardNumber}`; // Fixed broken text format here
+    const key = `${currentCollectionId}:${randomCard.cardNumber}`;
     const alreadyOwned = ownedCards.get(key) === true;
-    
+  
     if (!alreadyOwned) {
         ownedCards.set(key, true);
         saveOwnedCards();
-        if (isSoundEnabled) {
-            const catchAudio = new Audio("./assets/audio/catch.mp3");
-            catchAudio.play().catch(e => console.log("Audio playback delayed or blocked:", e));
-        }
+        
+        // FORTIFIED AUDIO DRIVER LAYERS
+			// CHECK MUTE FLAG PRIOR TO LAUNCHING ENGINE FILES
+		if (isSoundEnabled) {
+			const catchAudio = document.getElementById("catch-sound");
+			if (catchAudio) {
+				catchAudio.currentTime = 0; // Rewinds to the beginning so it triggers instantly on fast clicks
+				catchAudio.play().catch(e => console.log("Audio playback blocked:", e));
+			}
+		}
+
     }
 
     const imgSrc = `./collections/${currentCollectionId}/${randomCard.file}`;

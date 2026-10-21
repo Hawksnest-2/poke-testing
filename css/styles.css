@@ -799,3 +799,57 @@ SETTINGS MANAGEMENT VIEW PANEL
 .import-btn { background-color: #2e7d32; color: #fff; }
 .danger-zone { border-color: #8b0000; }
 .reset-all-btn { background-color: #8b0000; color: #fff; }
+/*************************************************
+SETTINGS MENU: RARITY LEGEND TABLE
+*************************************************/
+.legend-scroll-box {
+  width: 100%;
+  max-height: 220px;       /* Keeps the table compact with a dedicated inner scrollbar */
+  overflow-y: auto;        /* Restricts scrolling strictly to inside this list container */
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #0f0f0f;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+.legend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.legend-table th, .legend-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #222;
+}
+
+.legend-table th {
+  background-color: #151515;
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;                  /* Freezes the table headers while scrolling individual rows */
+  z-index: 2;
+}
+
+/* Specific alignments matching emblem icon distributions */
+.legend-table td:first-child {
+  font-size: 1.2rem;
+  width: 30%;              /* Allocates strict spacing width dimensions for symbols lane */
+  text-align: center;
+}
+
+.legend-table td:last-child {
+  color: #ffffff;
+}
+
+/* Subtle zebra striping for crisp row scannability */
+.legend-table tbody tr:nth-child(even) {
+  background-color: #131313;
+}
