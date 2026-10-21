@@ -126,25 +126,31 @@
         </div>
     </div>
 
-       <!-- ==========================================
-         MY POKEDEX PAGE
-         ========================================== -->
+    <!-- ==========================================
+        MY POKEDEX PAGE
+     ========================================== -->
     <div id="pokedex" class="pokedex hidden">
-        <div class="overview-header">
-            <!-- Restored: Replaced home icon with your custom Poke-Center asset buttons configuration -->
-            <button id="pokedex-return-button" class="return-button">
-                <img src="./assets/logos/Poke_Center.png" alt="Home" class="pc-icon-small">
-                Poké‑Center
-            </button>
-            <img class="pokedex-logo" src="./assets/logos/pokedex.png" alt="Pokedex Logo">
-            <div style="width:75px;"></div> <!-- Balanced spacer alignment alignment element row layout matrices profiles values mapping layout strings layers modules settings -->
+        <!-- Persistent Group Header Container Layer: Stays locked at the top -->
+        <div class="pokedex-header-sticky-group">
+            <div class="overview-header">
+                <button id="pokedex-return-button" class="return-button">
+                    <img src="./assets/logos/Poke_Center.png" alt="Home" class="pc-icon-small">
+                    Poké‑Center
+                </button>
+                <img class="pokedex-logo" src="./assets/logos/pokedex.png" alt="Pokedex Logo">
+                <div style="width:75px;"></div> <!-- Balanced layout spacer alignment -->
+            </div>
+            
+            <!-- Locked Subtitle Row added directly below the logo inside the sticky container -->
+            <h2 class="pokedex-view-title">My Pokédex</h2>
         </div>
+        
+        <!-- Scrolling Content Panel: Only the grid and reset button scroll -->
         <div id="pokedex-scroll-layer">
             <div id="pokedex-grid" class="pokedex-grid"></div>
             <button id="reset-pokedex-button" class="reset-button">Reset All Progress</button>
         </div>
     </div>
-
 
     <!-- ==========================================
          SETTINGS MANAGEMENT PAGE

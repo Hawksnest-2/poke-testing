@@ -657,6 +657,20 @@ MY POKEDEX
 }
 
 /*************************************************
+MY POKEDEX SUBTITLE CENTER OVERRIDE
+*************************************************/
+.pokedex-view-title {
+  display: block;          /* Breaks away from flex constraints to take full width */
+  text-align: center;       /* Centers the text completely within the row */
+  width: 100%;             /* Spans across the entire viewport width */
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 10px 0 5px 0;    /* Resets margins for precise box alignment */
+  box-sizing: border-box;
+}
+
+/*************************************************
 SETTINGS MANAGEMENT VIEW PANEL
 *************************************************/
 .settings-view {
