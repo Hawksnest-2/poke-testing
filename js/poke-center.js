@@ -2,7 +2,6 @@
 poke-center.js
 
 Poké‑Center Collection Manager
-
 Features
 ---------
 • Collection Selection
@@ -19,43 +18,56 @@ IMPORTS
 ******************************************************************************/
 import { collections } from "./manifest.js";
 import { rarityLegend } from "./rarity.js";
+
 /******************************************************************************
 RARITY CONFIGURATION
 ******************************************************************************/
 const rarityConfig = {
-    common: {
-        icon: rarityLegend["Common"],
-        keys: ["Common"]
-    },
+    common: { 
+	icon: rarityLegend["Common"],
+	keys: ["Common"] 
+	},
     uncommon: {
-        icon: rarityLegend["Uncommon"],
-        keys: ["Uncommon"]
-    },
+		icon: rarityLegend["Uncommon"],
+		keys: ["Uncommon"]
+		},
     rare: {
         icon: rarityLegend["Rare"],
         keys: [
             "Rare",
-            "Double Rare",
-            "Ultra Rare",
-            "Classic Collection",
+			"Double Rare",
+			"Ultra Rare",
+			"Classic Collection",
             "Illustration Rare",
-            "Special Illustration Rare",
-            "Shiny Rare",
+			"Special Illustration Rare",
+			"Shiny Rare",
             "Shiny Ultra Rare",
-            "Mega Attack Rare",
-            "Hyper Rare",
+			"Mega Attack Rare",
+			"Hyper Rare",
             "Mega Hyper Rare",
-            "Pikachu Rare",
-            "Futuristic Rare",
+			"Pikachu Rare",
+			"Futuristic Rare",
             "Black White Rare",
-            "ACE SPEC Rare"
+			"ACE SPEC Rare"
         ]
     }
 };
+
 /******************************************************************************
-CACHE
+CACHE & STATE
 ******************************************************************************/
 const collectionCache = new Map();
+const ownedCards = new Map();
+
+let currentCollectionId = null;
+let currentCollectionData = null;
+let pendingCatchRefresh = false;
+let currentModalCard = null;
+
+// Pinch Zoom globals properly scoped to the module
+let scale = 1;
+let startDistance = 0;
+
 /******************************************************************************
 DOM REFERENCES
 ******************************************************************************/
@@ -99,21 +111,15 @@ const modalImage = document.getElementById("modal-image");
 const modalNumber = document.getElementById("modal-number");
 const modalName = document.getElementById("modal-name");
 const modalClose = document.getElementById("modal-close");
-/******************************************************************************
-APPLICATION STATE
-******************************************************************************/
-let currentCollectionId = null;
-let currentCollectionData = null;
-let pendingCatchRefresh = false;
-let currentModalCard = null;
+
 /******************************************************************************
 LOCAL STORAGE
 ******************************************************************************/
-const ownedCards = new Map();
 function saveOwnedCards() {
     const obj = Object.fromEntries(ownedCards);
     localStorage.setItem("ownedCards", JSON.stringify(obj));
 }
+
 function loadOwnedCards() {
     const raw = localStorage.getItem("ownedCards");
     if (!raw) return;
@@ -127,6 +133,7 @@ function loadOwnedCards() {
         console.error("Failed to load ownedCards:", e);
     }
 }
+
 /******************************************************************************
 SCREEN MANAGEMENT
 ******************************************************************************/
@@ -152,6 +159,7 @@ function showScreen(screen) {
             break;
     }
 }
+
 /******************************************************************************
 MODAL HELPER
 ******************************************************************************/
@@ -166,6 +174,7 @@ function setModalRarityBorder(rarity) {
         content.classList.add("rarity-rare");
     }
 }
+
 /******************************************************************************
 COLLECTION DATA LOADING
 ******************************************************************************/
@@ -196,6 +205,7 @@ async function loadCollectionData(collectionId) {
     collectionCache.set(collectionId, data);
     return data;
 }
+
 /******************************************************************************
 HOME PAGE
 ******************************************************************************/
@@ -206,7 +216,7 @@ function renderCollectionSelector() {
         tile.className = "collection-tile";
         const img = document.createElement("img");
         img.className = "collection-logo";
-        img.src = `/poke-testing/assets/logos/${col.logo}`;
+        img.src = `./assets/logos/${col.logo}`;
         const name = document.createElement("span");
         name.className = "collection-name";
         name.textContent = col.name;
@@ -216,6 +226,7 @@ function renderCollectionSelector() {
         collectionSelector.appendChild(tile);
     });
 }
+
 /******************************************************************************
 COLLECTION OVERVIEW
 ******************************************************************************/
@@ -225,7 +236,7 @@ async function enterCollectionOverview(collectionId) {
     showScreen("overview");
     const collectionMeta = collections.find(c => c.id === collectionId);
     overviewTitle.textContent = collectionMeta ? collectionMeta.name : collectionId;
-    document.getElementById("overview-logo").src = `/poke-testing/assets/logos/${collectionMeta.logo}`;
+    document.getElementById("overview-logo").src = `./assets/logos/${collectionMeta.logo}`;
     const totalCards = currentCollectionData.length;
     let ownedCount = 0;
     const rarityCounts = {
@@ -256,6 +267,7 @@ async function enterCollectionOverview(collectionId) {
     rarityCommonIcon.textContent = rarityConfig.common.icon;
     rarityUncommonIcon.textContent = rarityConfig.uncommon.icon;
     rarityRareIcon.textContent = rarityConfig.rare.icon;
+    
     function setRarityRow(counts, fillEl, textEl) {
         const { owned, total } = counts;
         const pct = total > 0 ? Math.round((owned / total) * 100) : 0;
@@ -266,6 +278,7 @@ async function enterCollectionOverview(collectionId) {
     setRarityRow(rarityCounts.uncommon, rarityUncommonFill, rarityUncommonText);
     setRarityRow(rarityCounts.rare, rarityRareFill, rarityRareText);
 }
+
 /******************************************************************************
 CARD VIEWER
 ******************************************************************************/
@@ -276,7 +289,7 @@ function renderCardViewer() {
     showScreen("viewer");
     const collectionMeta = collections.find(c => c.id === currentCollectionId);
     collectionTitle.textContent = collectionMeta ? collectionMeta.name : currentCollectionId;
-	document.getElementById("viewer-logo").src = `/poke-testing/assets/logos/${collectionMeta.logo}`;
+    document.getElementById("viewer-logo").src = `./assets/logos/${collectionMeta.logo}`;
     cardGrid.innerHTML = "";
     currentCollectionData.forEach(card => {
         const key = `${currentCollectionId}:${card.cardNumber}`;
@@ -285,7 +298,7 @@ function renderCardViewer() {
         tile.className = "card-tile";
         const img = document.createElement("img");
         img.className = "card-image";
-        const imgSrc = isOwned ? `/poke-testing/collections/${currentCollectionId}/${card.file}` : `/poke-testing/assets/logos/cardback.jpg`;
+        const imgSrc = isOwned ? `./collections/${currentCollectionId}/${card.file}` : `./assets/logos/cardback.jpg`;
         img.src = imgSrc;
         tile.appendChild(img);
         const info = document.createElement("div");
@@ -298,7 +311,7 @@ function renderCardViewer() {
         name.textContent = card.name;
         const rarity = document.createElement("div");
         rarity.className = "card-rarity";
-        rarity.textContent = `${rarityLegend[card.rarity]} ${card.rarity}`;
+        rarity.textContent = `${rarityLegend[card.rarity] || ""} ${card.rarity}`;
         info.appendChild(num);
         info.appendChild(name);
         info.appendChild(rarity);
@@ -310,27 +323,22 @@ function renderCardViewer() {
         cardGrid.appendChild(tile);
     });
 }
+
 /******************************************************************************
 CARD MODAL
 ******************************************************************************/
 function openCardModal(card, isOwned) {
     currentModalCard = card;
-    const imgSrc = isOwned ? `/poke-testing/collections/${currentCollectionId}/${card.file}` : `/poke-testing/assets/logos/cardback.jpg`;
+    const imgSrc = isOwned ? `./collections/${currentCollectionId}/${card.file}` : `./assets/logos/cardback.jpg`;
     modalImage.src = imgSrc;
     modalNumber.textContent = card.number || "";
     modalName.textContent = card.name || "";
-    document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
+    document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity] || "";
     document.getElementById("modal-rarity-text").textContent = card.rarity;
     setModalRarityBorder(card.rarity);
     cardModal.classList.remove("hidden");
 }
-function closeCardModal() {
-    cardModal.classList.add("hidden");
-    modalImage.style.transform = "";
-    scale = 1;
-    startDistance = 0;
-    currentModalCard = null;
-}
+
 /******************************************************************************
 RESET COLLECTION
 ******************************************************************************/
@@ -348,6 +356,7 @@ function resetCurrentCollection() {
     saveOwnedCards();
     renderCardViewer();
 }
+
 /******************************************************************************
 CATCH LOGIC
 ******************************************************************************/
@@ -367,16 +376,17 @@ function catchRandomPokemon() {
     const key = `${currentCollectionId}:${randomCard.cardNumber}`;
     ownedCards.set(key, true);
     saveOwnedCards();
-    const imgSrc = `/poke-testing/collections/${currentCollectionId}/${randomCard.file}`;
+    const imgSrc = `./collections/${currentCollectionId}/${randomCard.file}`;
     modalImage.src = imgSrc;
     modalName.textContent = randomCard.name || "";
-    document.getElementById("modal-rarity-icon").textContent = rarityLegend[randomCard.rarity];
+    document.getElementById("modal-rarity-icon").textContent = rarityLegend[randomCard.rarity] || "";
     document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
     setModalRarityBorder(randomCard.rarity);
     currentModalCard = randomCard;
     cardModal.classList.remove("hidden");
     pendingCatchRefresh = true;
 }
+
 /******************************************************************************
 MY POKEDEX
 ******************************************************************************/
@@ -398,7 +408,7 @@ async function renderPokedexPage() {
         tile.className = "mc-tile";
         const img = document.createElement("img");
         img.className = "mc-logo";
-        img.src = `/poke-testing/assets/logos/${col.logo}`;
+        img.src = `./assets/logos/${col.logo}`;
         const name = document.createElement("div");
         name.textContent = col.name;
         const progress = document.createElement("div");
@@ -415,6 +425,7 @@ async function renderPokedexPage() {
         pokedexGrid.appendChild(tile);
     }
 }
+
 /******************************************************************************
 EVENT LISTENERS
 ******************************************************************************/
@@ -437,11 +448,6 @@ viewerReturnButton.addEventListener("click", () => {
 viewerHomeReturnButton.addEventListener("click", () => {
     showScreen("home");
 });
-/*
- * FIXED:
- * Previously returned to renderCardViewer()
- * Now correctly opens My Pokedex.
- */
 viewerPokedexButton.addEventListener("click", () => {
     renderPokedexPage();
     showScreen("pokedex");
@@ -467,13 +473,10 @@ modalClose.addEventListener("click", () => {
 catchOpenImageOverview.addEventListener("click", catchRandomPokemon);
 /* Reset Button */
 document.getElementById("reset-pokedex-button").addEventListener("click", resetCurrentCollection);
+
 /******************************************************************************
 PINCH ZOOM
 ******************************************************************************/
-let scale = 1;
-let startDistance = 0;
-let translateX = 0;
-let translateY = 0;
 modalImage.addEventListener("touchmove", e => {
     if (e.touches.length === 2) {
         const [t1, t2] = e.touches;
@@ -490,9 +493,18 @@ modalImage.addEventListener("touchmove", e => {
 modalImage.addEventListener("touchend", () => {
     startDistance = 0;
 });
+
 /******************************************************************************
 APPLICATION STARTUP
 ******************************************************************************/
 loadOwnedCards();
 renderCollectionSelector();
 showScreen("home");
+
+function closeCardModal() {
+    cardModal.classList.add("hidden");
+    modalImage.style.transform = "";
+    scale = 1;
+    startDistance = 0;
+    currentModalCard = null;
+}
