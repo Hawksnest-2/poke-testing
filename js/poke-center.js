@@ -96,6 +96,7 @@ const pokedexGrid = document.getElementById("pokedex-grid");
 /* Card Modal */
 const cardModal = document.getElementById("card-modal");
 const modalImage = document.getElementById("modal-image");
+const modalNumber = document.getElementById("modal-number");
 const modalName = document.getElementById("modal-name");
 const modalClose = document.getElementById("modal-close");
 /******************************************************************************
@@ -316,6 +317,7 @@ function openCardModal(card, isOwned) {
     currentModalCard = card;
     const imgSrc = isOwned ? `/poke-testing/collections/${currentCollectionId}/${card.file}` : `/poke-testing/assets/logos/cardback.jpg`;
     modalImage.src = imgSrc;
+    modalNumber.textContent = card.number || "";
     modalName.textContent = card.name || "";
     document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity];
     document.getElementById("modal-rarity-text").textContent = card.rarity;
@@ -433,7 +435,7 @@ viewerReturnButton.addEventListener("click", () => {
     enterCollectionOverview(currentCollectionId);
 });
 viewerHomeReturnButton.addEventListener("click", () => {
-    enterCollectionOverview(currentCollectionId);
+    showScreen("home");
 });
 /*
  * FIXED:
