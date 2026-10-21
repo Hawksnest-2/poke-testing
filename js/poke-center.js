@@ -145,6 +145,7 @@ function showScreen(screen) {
     pokedexPage.classList.add("hidden");
     switch (screen) {
         case "home":
+            document.getElementById("home-scroll-layer").scrollTop = 0; 
             mainHeader.classList.remove("hidden");
             collectionSelector.classList.remove("hidden");
             break;
@@ -155,7 +156,8 @@ function showScreen(screen) {
             cardViewer.classList.remove("hidden");
             break;
         case "pokedex":
-            pokedexPage.classList.remove("hidden");
+            document.getElementById("pokedex-scroll-layer").scrollTop = 0; 
+			pokedexPage.classList.remove("hidden");
             break;
     }
 }
@@ -286,6 +288,7 @@ function renderCardViewer() {
     if (!currentCollectionData || !currentCollectionId) {
         return;
     }
+	document.getElementById("viewer-scroll-layer").scrollTop = 0;
     showScreen("viewer");
     const collectionMeta = collections.find(c => c.id === currentCollectionId);
     /*collectionTitle.textContent = collectionMeta ? collectionMeta.name : currentCollectionId;  <--commented out*/
