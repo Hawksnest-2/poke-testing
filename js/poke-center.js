@@ -49,6 +49,11 @@ let pendingCatchRefresh = false;
 let currentModalCard = null;
 let scale = 1;
 let startDistance = 0;
+let currentX = 0;
+let currentY = 0;
+let startX = 0;
+let startY = 0;
+let isDragging = false;
 let isSoundEnabled = true;
 let defaultViewerFilter = "all";
 
