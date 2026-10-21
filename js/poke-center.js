@@ -50,6 +50,7 @@ let currentModalCard = null;
 let scale = 1;
 let startDistance = 0;
 let isSoundEnabled = true;
+let defaultViewerFilter = "all";
 
 /******************************************************************************
 DOM REFERENCES
@@ -63,6 +64,7 @@ const settingsBackupBox = document.getElementById("settings-backup-box");
 const settingsCopyBtn = document.getElementById("settings-copy-btn");
 const settingsImportBtn = document.getElementById("settings-import-btn");
 const resetAllButton = document.getElementById("reset-all-button");
+const settingsDefaultFilter = document.getElementById("settings-default-filter");
 /* Home */
 const mainHeader = document.getElementById("main-header");
 const collectionSelector = document.getElementById("collection-selector");
@@ -91,6 +93,7 @@ const viewerReturnButton = document.getElementById("viewer-return-button");
 const viewerHomeReturnButton = document.getElementById("viewer-home-return-button");
 const viewerPokedexButton = document.getElementById("viewer-pokedex-button");
 const cardGrid = document.getElementById("card-grid");
+const viewerFilterSelect = document.getElementById("viewer-filter-select");
 /* My Pokedex */
 const pokedexPage = document.getElementById("pokedex");
 const pokedexReturnButton = document.getElementById("pokedex-return-button");
@@ -162,49 +165,87 @@ function loadOwnedCards() {
     } catch (e) {
         console.error("Failed to load ownedCards:", e);
     }
+	// Append this inside loadOwnedCards() right alongside the sound preference loader block
+    const savedFilterPref = localStorage.getItem("defaultViewerFilterPreference");
+    if (savedFilterPref !== null) {
+        defaultViewerFilter = savedFilterPref;
+    if (settingsDefaultFilter) settingsDefaultFilter.value = defaultViewerFilter;
+    }
 }
 
-/******************************************************************************
-SCREEN MANAGEMENT
-******************************************************************************/
+/*************************************************
+DIAGNOSTIC SCREEN MANAGEMENT
+*************************************************/
 function showScreen(screen) {
-    if (mainHeader) mainHeader.classList.add("hidden");
-    if (collectionSelector) collectionSelector.classList.add("hidden");
-    if (collectionOverview) collectionOverview.classList.add("hidden");
-    if (cardViewer) cardViewer.classList.add("hidden");
-    if (pokedexPage) pokedexPage.classList.add("hidden");
-    if (settingsPage) settingsPage.classList.add("hidden");
+    // 1. Target by known screen layout class names to ensure we hit everything uniformly
+    const classesToHide = [
+        "main-header", 
+        "collection-selector", 
+        "collection-overview", 
+        "card-viewer", 
+        "pokedex", 
+        "settings-view"
+    ];
 
+    classesToHide.forEach(className => {
+        const elements = document.getElementsByClassName(className);
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].classList.add("hidden");
+        }
+    });
+
+    // Also hide explicitly targeted unique IDs safely
+    const idsToHide = ["main-header", "collection-selector", "collection-overview", "card-viewer", "pokedex", "settings-page"];
+    idsToHide.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+    });
+
+    // 2. Clear scrolling view layers
     setTimeout(() => {
         window.scrollTo(0, 0);
         if (document.body) document.body.scrollTop = 0;
         if (document.documentElement) document.documentElement.scrollTop = 0;
+        
         ["home-scroll-layer", "viewer-scroll-layer", "pokedex-scroll-layer"].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.scrollTop = 0;
         });
     }, 10);
 
+    // 3. Reveal screens by testing BOTH their direct literal IDs and structural layout tags
     switch (screen) {
         case "home":
-            if (mainHeader) mainHeader.classList.remove("hidden");
-            if (collectionSelector) collectionSelector.classList.remove("hidden");
+            // Home needs both the header block and selector block visible
+            const header = document.getElementById("main-header") || document.querySelector(".main-header");
+            const selector = document.getElementById("collection-selector") || document.querySelector(".collection-selector");
+            if (header) header.classList.remove("hidden");
+            if (selector) selector.classList.remove("hidden");
             break;
+            
         case "overview":
-            if (collectionOverview) collectionOverview.classList.remove("hidden");
+            const overview = document.getElementById("collection-overview") || document.querySelector(".collection-overview");
+            if (overview) overview.classList.remove("hidden");
             break;
+            
         case "viewer":
-            if (cardViewer) cardViewer.classList.remove("hidden");
+            const viewer = document.getElementById("card-viewer") || document.querySelector(".card-viewer");
+            if (viewer) viewer.classList.remove("hidden");
             break;
+            
         case "pokedex":
-            if (pokedexPage) pokedexPage.classList.remove("hidden");
+            const dex = document.getElementById("pokedex") || document.querySelector(".pokedex");
+            if (dex) dex.classList.remove("hidden");
             break;
+            
         case "settings":
             generateBackupStringKey();
-            if (settingsPage) settingsPage.classList.remove("hidden");
+            const settings = document.getElementById("settings-page") || document.querySelector(".settings-view");
+            if (settings) settings.classList.remove("hidden");
             break;
     }
 }
+
 
 /******************************************************************************
 MODAL HELPER
@@ -310,45 +351,86 @@ async function enterCollectionOverview(collectionId) {
 /******************************************************************************
 CARD VIEWER
 ******************************************************************************/
+/******************************************************************************
+CARD VIEWER
+******************************************************************************/
 function renderCardViewer() {
     if (!currentCollectionData || !currentCollectionId) return;
     document.getElementById("viewer-scroll-layer").scrollTop = 0;
     showScreen("viewer");
+    
+    // SAFE CHECK: Only update the dropdown if it successfully exists in your HTML DOM
+    if (viewerFilterSelect) {
+        viewerFilterSelect.value = defaultViewerFilter;
+    }
+    
     const collectionMeta = collections.find(c => c.id === currentCollectionId);
-    document.getElementById("viewer-logo").src = `./assets/logos/${collectionMeta.logo}`;
+    if (collectionMeta) {
+        const viewerLogoEl = document.getElementById("viewer-logo");
+        if (viewerLogoEl) {
+            viewerLogoEl.src = `./assets/logos/${collectionMeta.logo}`;
+        }
+    }
+    
+    executeFilteredGridRender();
+}
+
+/* Updated helper engine function with strict safety boundaries */
+function executeFilteredGridRender() {
+    if (!cardGrid || !currentCollectionData) return;
     cardGrid.innerHTML = "";
+    
+    // SAFE CHECK: Fallback safely to "all" if the element layout isn't found
+    const activeFilter = viewerFilterSelect ? viewerFilterSelect.value : "all";
+
     currentCollectionData.forEach(card => {
         const key = `${currentCollectionId}:${card.cardNumber}`;
         const isOwned = ownedCards.get(key) === true;
+        
+        // 3-WAY FILTER EVALUATION LAYER CHECKPOINTS
+        if (activeFilter === "owned" && !isOwned) return;     // Skip rendering if we only want owned cards
+        if (activeFilter === "missing" && isOwned) return;    // Skip rendering if we only want missing cards
+
         const tile = document.createElement("div");
         tile.className = "card-tile";
+        
         const img = document.createElement("img");
         img.className = "card-image";
         img.src = isOwned ? `./collections/${currentCollectionId}/${card.file}` : `./assets/logos/cardback.jpg`;
         tile.appendChild(img);
+        
         const info = document.createElement("div");
         info.className = "card-info";
+        
         const metaLine = document.createElement("div");
         metaLine.className = "card-meta-line";
+        
         const rarityIcon = document.createElement("span");
         rarityIcon.className = "card-rarity-icon";
         rarityIcon.textContent = rarityLegend[card.rarity] || "";
+        
         const cardNumber = document.createElement("span");
         cardNumber.className = "card-number";
         cardNumber.textContent = " - #" + String(card.cardNumber).padStart(3, "0");
+        
         metaLine.appendChild(rarityIcon);
         metaLine.appendChild(cardNumber);
+        
         const name = document.createElement("div");
         name.className = "card-name";
         name.textContent = card.name;
+        
         info.appendChild(metaLine);
         info.appendChild(name);
         tile.appendChild(info);
-        tile.addEventListener("click", () => { openCardModal(card, ownedCards.get(key) === true); });
+        
+        tile.addEventListener("click", () => { 
+            openCardModal(card, ownedCards.get(key) === true); 
+        });
+        
         cardGrid.appendChild(tile);
     });
 }
-
 
 /******************************************************************************
 CARD MODAL
@@ -577,6 +659,17 @@ if (settingsImportBtn) {
 }
 if (resetAllButton) {
     resetAllButton.addEventListener("click", resetAllCollectionsGlobally);
+}
+/* Dropdown Live Filter Changes inside Card Viewer */
+if (viewerFilterSelect) {
+    viewerFilterSelect.addEventListener("change", executeFilteredGridRender);
+}
+/* Default Configuration Changes inside Settings Tab Menu */
+if (settingsDefaultFilter) {
+    settingsDefaultFilter.addEventListener("change", (e) => {
+        defaultViewerFilter = e.target.value;
+        localStorage.setItem("defaultViewerFilterPreference", defaultViewerFilter);
+    });
 }
 
 /******************************************************************************

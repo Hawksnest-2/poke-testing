@@ -9,352 +9,234 @@
           href="./css/styles.css">
 </head>
 <body>
-    <!-- ==========================================
-         HOME PAGE
-         ========================================== -->
+
+    <audio id="catch-sound" src="./catch.mp3" preload="auto"></audio>
+
     <!-- ==========================================
          HOME PAGE
          ========================================== -->
     <div id="main-header">
-        <!-- Settings Gear Icon added to the top left corner -->
+        <!-- Settings Gear Icon locked to top left corner -->
         <button id="settings-open-btn" class="settings-gear-btn">⚙️</button>
 
         <div class="main-title">
-            <img
-                src="./assets/logos/Poke_Center.png"
-                alt="Poké‑Center"
-                class="main-logo"
-            >
-            <h1 class="title">
-                Poké‑Center
-            </h1>
+            <img src="./assets/logos/Poke_Center.png" alt="Poké‑Center" class="main-logo">
+            <h1 class="title">Poké‑Center</h1>
         </div>
+        
         <button id="home-pokedex-button" class="pokedex-button">
-            <img
-                src="./assets/logos/pokedex.png"
-                alt="Pokedex logo"
-                class="pokedex-icon"
-            >
+            <img src="./assets/logos/pokedex.png" alt="Pokedex logo" class="pokedex-icon">
             Pokédex
         </button>
-        <!-- NEW: Wrapping scrolling components into their own layout layer -->
+        
+        <!-- Scrolling items container layer -->
         <div id="home-scroll-layer">
-            <h2 class="subtitle">
-                Select a Collection
-            </h2>
-            <div id="collection-selector" class="collection-selector">
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         SETTINGS MANAGEMENT PAGE
-         ========================================== -->
-    <div id="settings-page" class="settings-view hidden">
-        <div class="overview-header">
-            <button id="settings-return-button" class="return-button">
-                <span>⬅️ Return</span>
-            </button>
-        </div>
-        
-        <h1 class="overview-title">Application Settings</h1>
-        
-        <div class="settings-container">
-            <!-- 1. FEEDBACK -->
-            <div class="settings-card">
-                <h3>📬 App Feedback</h3>
-                <p>Share your ideas or report bugs via our official feedback channel.</p>
-                <a href="https://forms.gle/mWhPcuKA5fSqovAb8" target="_blank" class="settings-action-btn feedback-btn">Open Google Form</a>
-            </div>
-
-            <!-- 2. SOUND TOGGLE -->
-            <div class="settings-card">
-                <h3>🎵 Audio Enhancements</h3>
-                <p>Toggle sound effects played during a new card collection sequence.</p>
-                <label class="toggle-control-row">
-                    <input type="checkbox" id="settings-sound-toggle" checked>
-                    <span class="toggle-label-text">Enable Catch Sound FX</span>
-                </label>
-            </div>
-
-            <!-- 3. BACKUP & RESTORE -->
-            <div class="settings-card">
-                <h3>💾 Backup & Restore Progress</h3>
-                <p>Copy your save database text block to move your binder metrics to another phone or device.</p>
-                <textarea id="settings-backup-box" placeholder="Your migration key data code prints here..." readonly></textarea>
-                <div class="settings-button-row">
-                    <button id="settings-copy-btn" class="settings-action-btn copy-btn">📋 Copy Key</button>
-                    <button id="settings-import-btn" class="settings-action-btn import-btn">📥 Import Data</button>
-                </div>
-            </div>
-
-            <!-- 4. GLOBAL RESET -->
-            <div class="settings-card danger-zone">
-                <h3>⚠️ Global Factory Reset</h3>
-                <p>Permanently remove your collection history data logs. This instantly zeros out every binder card tracked.</p>
-                <button id="reset-all-button" class="settings-action-btn reset-all-btn">Reset All Progress</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         SETTINGS MANAGEMENT PAGE
-         ========================================== -->
-    <div id="settings-page" class="settings-view hidden">
-        <div class="overview-header">
-            <button id="settings-return-button" class="return-button">
-                <span>⬅️ Return</span>
-            </button>
-        </div>
-        
-        <h1 class="overview-title">Application Settings</h1>
-        
-        <div class="settings-container">
-            <!-- 1. FEEDBACK -->
-            <div class="settings-card">
-                <h3>📬 App Feedback</h3>
-                <p>Share your ideas or report bugs via our official feedback channel.</p>
-                <a href="https://forms.gle" target="_blank" class="settings-action-btn feedback-btn">Open Google Form</a>
-            </div>
-
-            <!-- 2. SOUND TOGGLE -->
-            <div class="settings-card">
-                <h3>🎵 Audio Enhancements</h3>
-                <p>Toggle sound effects played during a new card collection sequence.</p>
-                <label class="toggle-control-row">
-                    <input type="checkbox" id="settings-sound-toggle" checked>
-                    <span class="toggle-label-text">Enable Catch Sound FX</span>
-                </label>
-            </div>
-
-            <!-- 3. BACKUP & RESTORE -->
-            <div class="settings-card">
-                <h3>💾 Backup & Restore Progress</h3>
-                <p>Copy your save database text block to move your binder metrics to another phone or device.</p>
-                <textarea id="settings-backup-box" placeholder="Your migration key data code prints here..." readonly></textarea>
-                <div class="settings-button-row">
-                    <button id="settings-copy-btn" class="settings-action-btn copy-btn">📋 Copy Key</button>
-                    <button id="settings-import-btn" class="settings-action-btn import-btn">📥 Import Data</button>
-                </div>
-            </div>
-
-            <!-- 4. GLOBAL RESET -->
-            <div class="settings-card danger-zone">
-                <h3>⚠️ Global Factory Reset</h3>
-                <p>Permanently remove your collection history data logs. This instantly zeros out every binder card tracked.</p>
-                <button id="reset-all-button" class="settings-action-btn reset-all-btn">Reset All Progress</button>
-            </div>
+            <h2 class="subtitle">Select a Collection</h2>
+            <div id="collection-selector" class="collection-selector"></div>
         </div>
     </div>
 
     <!-- ==========================================
          COLLECTION OVERVIEW PAGE
          ========================================== -->
-    <div id="collection-overview"
-         class="collection-overview hidden">
+    <div id="collection-overview" class="collection-overview hidden">
         <div class="overview-header">
-            <button id="overview-return-button"
-                    class="return-button">
-                <img
-                    src="./assets/logos/Poke_Center.png"
-                    alt="Home"
-                    class="pc-icon-small"
-                >
+            <button id="overview-return-button" class="return-button">
+                <img src="./assets/logos/Poke_Center.png" alt="Home" class="pc-icon-small">
                 Poké‑Center
             </button>
-            <button id="overview-pokedex-button"
-                    class="pokedex-button">
-                <img
-                    src="./assets/logos/pokedex.png"
-                    alt="Pokédex logo"
-                    class="pokedex-icon">
+            <button id="overview-pokedex-button" class="pokedex-button">
+                <img src="./assets/logos/pokedex.png" alt="Pokédex logo" class="pokedex-icon">
                 Pokédex
             </button>
         </div>
-        <img id="overview-logo"
-             class="overview-logo"
-             src=""
-             alt="Collection Logo">
-        <h2 id="overview-catch-title"
-            class="subtitle overview-catch-title">
-        </h2>
+        
+        <img id="overview-logo" class="overview-logo" src="" alt="Collection Logo">
+        <h2 id="overview-catch-title" class="subtitle overview-catch-title"></h2>
+        
         <div class="catch-images">
-            <img
-                id="catch-open-image"
-                src="./assets/logos/catchbutton.png"
-                alt="Catch Pokémon"
-                class="catch-image"
-            >
+            <img id="catch-open-image" src="./assets/logos/catchbutton.png" alt="Catch Pokémon" class="catch-image">
         </div>
-        <div id="overview-stats-title"
-            class="subtitle overview-stats-title">
-        </div>
-        <div id="overview-progress"
-             class="overview-progress">
-            <p id="overview-total">
-            </p>
+        
+        <div id="overview-stats-title" class="subtitle overview-stats-title"></div>
+        
+        <div id="overview-progress" class="overview-progress">
+            <p id="overview-total"></p>
+            
             <div class="overview-rarity-row">
-                <span class="rarity-icon"
-                      id="rarity-common-icon">
-                </span>
-                <span class="rarity-label">
-                    Common
-                </span>
-                <div class="rarity-bar">
-                    <div id="rarity-common-fill"
-                         class="rarity-fill">
-                    </div>
-                </div>
-                <span id="rarity-common-text"
-                      class="rarity-text">
-                </span>
+                <span class="rarity-icon" id="rarity-common-icon"></span>
+                <span class="rarity-label">Common</span>
+                <div class="rarity-bar"><div id="rarity-common-fill" class="rarity-fill"></div></div>
+                <span id="rarity-common-text" class="rarity-text"></span>
             </div>
+            
             <div class="overview-rarity-row">
-                <span class="rarity-icon"
-                      id="rarity-uncommon-icon">
-                </span>
-                <span class="rarity-label">
-                    Uncommon
-                </span>
-                <div class="rarity-bar">
-                    <div id="rarity-uncommon-fill"
-                         class="rarity-fill">
-                    </div>
-                </div>
-                <span id="rarity-uncommon-text"
-                      class="rarity-text">
-                </span>
+                <span class="rarity-icon" id="rarity-uncommon-icon"></span>
+                <span class="rarity-label">Uncommon</span>
+                <div class="rarity-bar"><div id="rarity-uncommon-fill" class="rarity-fill"></div></div>
+                <span id="rarity-uncommon-text" class="rarity-text"></span>
             </div>
+            
             <div class="overview-rarity-row">
-                <span class="rarity-icon"
-                      id="rarity-rare-icon">
-                </span>
-                <span class="rarity-label">
-                    Rare
-                </span>
-                <div class="rarity-bar">
-                    <div id="rarity-rare-fill"
-                         class="rarity-fill">
-                    </div>
-                </div>
-                <span id="rarity-rare-text"
-                      class="rarity-text">
-                </span>
+                <span class="rarity-icon" id="rarity-rare-icon"></span>
+                <span class="rarity-label">Rare</span>
+                <div class="rarity-bar"><div id="rarity-rare-fill" class="rarity-fill"></div></div>
+                <span id="rarity-rare-text" class="rarity-text"></span>
             </div>
         </div>
     </div>
 
-   <!-- ==========================================
+    <!-- ==========================================
          CARD VIEWER PAGE
          ========================================== -->
     <div id="card-viewer" class="card-viewer hidden">
-        <!-- FIXED SECTION ROW 1: Navigation Buttons (Locked) -->
+        <!-- Persistent Header: Stays locked at the top -->
         <div class="overview-header">
             <button id="viewer-home-return-button" class="return-button">
                 <img src="./assets/logos/Poke_Center.png" alt="Home" class="pc-icon-small">
                 Poké‑Center
             </button>
             <button id="viewer-pokedex-button" class="pokedex-button">
-                <img src="./assets/logos/pokedex.png" alt="Pokédex" class="pokedex-icon">
+                <img src="./assets/logos/pokedex.png" alt="Pokédex logo" class="pokedex-icon">
                 Pokédex
             </button>
-        </div>	  
-        
-        <!-- FIXED SECTION ROW 2: Collection Logo Only (Locked) -->
-        <div class="viewer-header-logo-group" style="margin-bottom: 0;">
-            <button id="viewer-return-button" class="return-button">
-               <img id="viewer-logo" src="" alt="Collection Logo" class="collection-icon-small">
-            </button>
         </div>
-
-        <!-- NEW CHASSIS START: Scroll layer opens here so subtitle scrolls up! -->
-        <div id="viewer-scroll-layer">
-            <div class="subtitle" style="margin-top: 10px; margin-bottom: 20px;">
-                  Cards in the Collection
-            </div>
-
-            <div id="card-grid" class="card-grid" style="margin-top: 0;"></div>
-            
-            <button id="reset-pokedex-button" class="reset-button">
-                Reset This Collection
+        
+        <!-- Persistent Group: Stays locked at the top -->
+        <div class="viewer-header-logo-group">
+            <!-- Clickable Collection Logo to go back to overview page -->
+            <button id="viewer-return-button" class="return-button">
+                <img id="viewer-logo" class="overview-logo" src="" alt="Collection Logo">
             </button>
+            
+            <!-- Three-Way Dropdown view filter toolbar (Text Label Removed) -->
+            <div class="viewer-filter-bar">
+                <select id="viewer-filter-select" class="filter-dropdown">
+                    <option value="all">📖 Show All Cards</option>
+                    <option value="owned">✅ Owned Cards Only</option>
+                    <option value="missing">❌ Missing Cards Only</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Scrolling Content Panel: Only the grid and reset button scroll -->
+        <div id="viewer-scroll-layer">
+            <div id="card-grid" class="card-grid"></div>
+            <button id="reset-pokedex-button" class="reset-button">Reset This Collection</button>
         </div>
     </div>
 
-
-
-	    <!-- ==========================================
+       <!-- ==========================================
          MY POKEDEX PAGE
          ========================================== -->
     <div id="pokedex" class="pokedex hidden">
         <div class="overview-header">
-            <button id="pokedex-return-button"
-                    class="return-button">
-                <img
-                    src="./assets/logos/Poke_Center.png"
-                    alt="Home"
-                    class="pc-icon-small"
-                >
+            <!-- Restored: Replaced home icon with your custom Poke-Center asset buttons configuration -->
+            <button id="pokedex-return-button" class="return-button">
+                <img src="./assets/logos/Poke_Center.png" alt="Home" class="pc-icon-small">
                 Poké‑Center
             </button>
-            <button id="pokedex-header-indicator"
-                    class="pokedex-button">
-                <img
-                    src="./assets/logos/pokedex.png"
-                    alt="Pokedex logo"
-                    class="pokedex-icon"
-                >
-                Pokédex
-            </button>
+            <img class="pokedex-logo" src="./assets/logos/pokedex.png" alt="Pokedex Logo">
+            <div style="width:75px;"></div> <!-- Balanced spacer alignment alignment element row layout matrices profiles values mapping layout strings layers modules settings -->
         </div>
-        
-        <!-- NEW: Wrap the scrollable canvas layer here -->
         <div id="pokedex-scroll-layer">
             <div id="pokedex-grid" class="pokedex-grid"></div>
+            <button id="reset-pokedex-button" class="reset-button">Reset All Progress</button>
         </div>
-        <button id="pokedex-view-button" class="hidden"></button>
     </div>
 
 
-<!-- ==========================================
-     CARD MODAL
-     ========================================== -->
-<div id="card-modal" class="card-modal hidden">
-    <div class="card-modal-content">
-        <div class="modal-close-bar">
-            <button id="modal-close" class="modal-close-btn">✖</button>
+    <!-- ==========================================
+         SETTINGS MANAGEMENT PAGE
+         ========================================== -->
+    <div id="settings-page" class="settings-view hidden">
+        <div class="overview-header">
+            <button id="settings-return-button" class="return-button"><span>⬅️ Return</span></button>
         </div>
         
-        <!-- Card Asset Body underneath -->
-        <div class="modal-card-body">
-            <img id="modal-image" src="" alt="Card Preview">
-            <div class="modal-metadata">
-               <!-- Row 1: Number and Name side-by-side -->
-               <div class="modal-title-line">
-                    <span id="modal-number"></span>
-                    <span id="modal-name"></span>
-               </div>
-               <!-- Row 2: Rarity Icon and Rarity Text side-by-side -->
-               <div class="modal-rarity-line">
-                    <span id="modal-rarity-icon"></span>
-                    <span id="modal-rarity-text"></span>
+        <h1 class="overview-title">Application Settings</h1>
+        
+        <div class="settings-container">
+            <!-- 1. FEEDBACK -->
+            <div class="settings-card">
+                <h3>📬 App Feedback</h3>
+                <p>Share your ideas or report bugs via our official feedback channel.</p>
+                <a href="https://forms.gle/PAzV3F8mksGG9VSZ8" target="_blank" class="settings-action-btn feedback-btn">Open Google Form</a>
+            </div>
+
+            <!-- 2. SOUND TOGGLE -->
+            <div class="settings-card">
+                <h3>🎵 Audio Enhancements</h3>
+                <p>Toggle sound effects played during a new card collection sequence.</p>
+                <label class="toggle-control-row">
+                    <input type="checkbox" id="settings-sound-toggle" checked>
+                    <span class="toggle-label-text">Enable Catch Sound FX</span>
+                </label>
+            </div>
+
+            <!-- 3. CONFIG DEFAULT VIEWER FILTER -->
+            <div class="settings-card">
+                <h3>🔍 Default Card Viewer Filter</h3>
+                <p>Choose which card filter applies automatically whenever you open a set collection grid.</p>
+                <select id="settings-default-filter" class="settings-dropdown-input">
+                    <option value="all">📖 Show All Cards</option>
+                    <option value="owned">✅ Owned Cards Only</option>
+                    <option value="missing">❌ Missing Cards Only</option>
+                </select>
+            </div>
+
+            <!-- 4. BACKUP & RESTORE -->
+            <div class="settings-card">
+                <h3>💾 Backup & Restore Progress</h3>
+                <p>Copy your save database text block to move your binder metrics to another phone or device.</p>
+                <textarea id="settings-backup-box" placeholder="Your migration key data code prints here..." readonly></textarea>
+                <div class="settings-button-row">
+                    <button id="settings-copy-btn" class="settings-action-btn copy-btn">📋 Copy Key</button>
+                    <button id="settings-import-btn" class="settings-action-btn import-btn">📥 Import Data</button>
                 </div>
-                <!-- Row 3: New Status and Count Indicators -->
-                <div class="modal-status-line">
-                    <div id="modal-catch-status"></div>
-                    <div id="modal-collection-count"></div>
-                </div>
-             </div>
+            </div>
+
+            <!-- 5. GLOBAL FACTORY RESET -->
+            <div class="settings-card danger-zone">
+                <h3>⚠️ Global Factory Reset</h3>
+                <p>Permanently remove your collection history data logs. This instantly zeros out every binder card tracked.</p>
+                <button id="reset-all-button" class="settings-action-btn reset-all-btn">Reset All Progress</button>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- ==========================================
+         CARD DETAIL MODAL INTERACTIVE POPUP
+         ========================================== -->
+    <div id="card-modal" class="card-modal hidden">
+        <div class="card-modal-content">
+            <div class="modal-close-bar">
+                <button id="modal-close" class="modal-close-btn">✖</button>
+            </div>
+            <div class="modal-card-body">
+                <img id="modal-image" src="" alt="Card Preview">
+                <div class="modal-metadata">
+                   <div class="modal-title-line">
+                        <span id="modal-number"></span>
+                        <span id="modal-name"></span>
+                   </div>
+                   <div class="modal-rarity-line">
+                        <span id="modal-rarity-icon"></span>
+                        <span id="modal-rarity-text"></span>
+                    </div>
+                    <div class="modal-status-line">
+                        <div id="modal-catch-status"></div>
+                        <div id="modal-collection-count"></div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ==========================================
          JAVASCRIPT
          ========================================== -->
-    <script
-        type="module"
-        src="./js/poke-center.js"
-    ></script>
+    <script type="module" src="./js/poke-center.js"></script>
 </body>
+
 </html>

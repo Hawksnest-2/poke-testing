@@ -1,18 +1,23 @@
 /*************************************************
 GLOBAL
 *************************************************/
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Locks the browser window frame securely */
+}
+
 body {
   background: #0f0f0f;
   color: #f0f0f0;
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
 }
 
 .hidden {
   display: none !important;
 }
+
 
 /*************************************************
 SHARED BUTTONS & ICONS
@@ -172,7 +177,17 @@ COLLECTION OVERVIEW
 .collection-overview {
   padding: 20px;
   margin: 0 auto;
-  text-align: center;
+  width: 100vw;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #0f0f0f;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Turns on clean scrolling inside the panel boundaries */
+  z-index: 50;
 }
 
 .overview-header {
@@ -181,6 +196,17 @@ COLLECTION OVERVIEW
   align-items: center;
   width: 100%;
 }
+
+/* Ensure the header layouts inside the overview panel spread out nicely */
+.collection-overview .overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 0;
+  padding-bottom: 10px;
+}
+
 
 .overview-title {
   text-align: center;
@@ -278,39 +304,33 @@ CATCH SECTION
 CARD VIEWER
 *************************************************/
 .card-viewer {
-  padding: 20px;
-  margin: 0 auto;
-  width: 100vw;
-  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
+  width: 100vw;
   height: 100vh;
+  box-sizing: border-box;
   background-color: #0f0f0f;
-  
-  /* CHANGED: Removed !important so the .hidden class can actually turn it off! */
   display: flex;  
-  
   flex-direction: column;
-  overflow: hidden;         
+  overflow: hidden; /* Stops headers from escaping the viewport boundaries */
+  z-index: 60;
 }
 
-/* Ensure the top buttons don't shrink inside the new flex layout */
-.card-viewer .overview-header {
-  flex-shrink: 0;
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+/* Lock down header sizing boundaries */
+.card-viewer .overview-header,
+.viewer-header-logo-group {
+  flex-shrink: 0; /* Forces buttons, logo, and filter to stay fixed at the top */
 }
 
+/* Force vertical scrolling panel boundaries exclusively for card tiles grid */
 #viewer-scroll-layer {
   width: 100%;
-  flex: 1;                  /* Dynamically claims 100% of left-over screen height */
-  overflow-y: auto;         /* Turns on clean vertical container scrolling exclusively */
+  flex: 1; /* Automatically claims 100% of left over height */
+  overflow-y: auto; /* Turns on clean scrolling only inside this layer wrapper */
   padding-bottom: 40px;            
-  -webkit-overflow-scrolling: touch; /* Butter-smooth trackpad tracking on iPhones */
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 .card-viewer-title {
@@ -369,19 +389,20 @@ CARD VIEWER
 }
 
 .viewer-header-logo-group {
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin: 10px auto;
   width: 100%;
+  flex-shrink: 0; /* Prevents the logo section from squishing */
+  margin: 5px auto 10px auto;
 }
 
 .viewer-header-logo-group .return-button {
   padding: 0;
   background: transparent;
+  cursor: pointer;
+  border: none;
 }
 
 .viewer-collection-title {
@@ -389,6 +410,34 @@ CARD VIEWER
   margin: 10px 0;
   font-size: 1.3rem;
   color: #ccc;
+}
+
+/* Card Viewer Filter Row Container styles */
+.viewer-filter-bar {
+  margin: 5px auto 5px auto; /* Tightens padding space below the logo */
+}
+
+
+.filter-dropdown, .settings-dropdown-input {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  min-width: 180px;
+}
+
+.settings-dropdown-input {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.filter-dropdown:focus, .settings-dropdown-input:focus {
+  border-color: #0078ff;
 }
 
 /*************************************************
