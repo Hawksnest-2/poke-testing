@@ -352,7 +352,8 @@ function openCardModal(card, isOwned) {
     currentModalCard = card;
     const imgSrc = isOwned ? `./collections/${currentCollectionId}/${card.file}` : `./assets/logos/cardback.jpg`;
     modalImage.src = imgSrc;
-    modalNumber.textContent = card.number || "";
+    modalNumber.textContent = `#${String(card.cardNumber).padStart(3, "0")}`;
+/*    modalNumber.textContent = card.number || ""; <---commented out*/
     modalName.textContent = card.name || "";
     document.getElementById("modal-rarity-icon").textContent = rarityLegend[card.rarity] || "";
     document.getElementById("modal-rarity-text").textContent = card.rarity;
@@ -399,9 +400,11 @@ function catchRandomPokemon() {
     saveOwnedCards();
     const imgSrc = `./collections/${currentCollectionId}/${randomCard.file}`;
     modalImage.src = imgSrc;
+    // FIX: Add this line so the number updates instantly when catching!
+    modalNumber.textContent = `#${String(randomCard.cardNumber).padStart(3, "0")}`;
     modalName.textContent = randomCard.name || "";
     document.getElementById("modal-rarity-icon").textContent = rarityLegend[randomCard.rarity] || "";
-    document.getElementById("modal-rarity-text").textContent = randomCard.rarity;
+    document.getElementById("modal-rarity-text").textContent = ` ${randomCard.rarity}`;
     setModalRarityBorder(randomCard.rarity);
     currentModalCard = randomCard;
     cardModal.classList.remove("hidden");

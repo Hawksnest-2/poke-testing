@@ -23,9 +23,7 @@
                 Poké‑Center
             </h1>
         </div>
-        <!-- FIXED: Changed to unique ID if needed, or kept as primary home trigger -->
-        <button id="home-pokedex-button"
-                class="pokedex-button">
+        <button id="home-pokedex-button" class="pokedex-button">
             <img
                 src="./assets/logos/pokedex.png"
                 alt="Pokedex logo"
@@ -33,12 +31,14 @@
             >
             Pokédex
         </button>
-        <h2 class="subtitle">
-            Select a Collection
-        </h2>
-    </div>
-    <div id="collection-selector"
-         class="collection-selector">
+        <!-- NEW: Wrapping scrolling components into their own layout layer -->
+        <div id="home-scroll-layer">
+            <h2 class="subtitle">
+                Select a Collection
+            </h2>
+            <div id="collection-selector" class="collection-selector">
+            </div>
+        </div>
     </div>
 
     <!-- ==========================================
@@ -138,57 +138,48 @@
         </div>
     </div>
 
-    <!-- ==========================================
+   <!-- ==========================================
          CARD VIEWER PAGE
          ========================================== -->
-    <div id="card-viewer"
-         class="card-viewer hidden">
+    <div id="card-viewer" class="card-viewer hidden">
+        <!-- FIXED SECTION ROW 1: Navigation Buttons (Locked) -->
         <div class="overview-header">
-            <button id="viewer-home-return-button"
-                    class="return-button">
-                <img
-                    src="./assets/logos/Poke_Center.png"
-                    alt="Home"
-                    class="pc-icon-small"
-                >
+            <button id="viewer-home-return-button" class="return-button">
+                <img src="./assets/logos/Poke_Center.png" alt="Home" class="pc-icon-small">
                 Poké‑Center
             </button>
-            <button id="viewer-pokedex-button"
-                    class="pokedex-button">
-                <img
-                    src="./assets/logos/pokedex.png"
-                    alt="Pokédex"
-                    class="pokedex-icon"
-                >
+            <button id="viewer-pokedex-button" class="pokedex-button">
+                <img src="./assets/logos/pokedex.png" alt="Pokédex" class="pokedex-icon">
                 Pokédex
             </button>
         </div>	  
         
-        <div class="viewer-header-logo-group">
-            <button id="viewer-return-button"
-                    class="return-button">
-               <img id="viewer-logo"
-                    src=""
-                    alt="Collection Logo"
-                    class="collection-icon-small"
-                >
+        <!-- FIXED SECTION ROW 2: Collection Logo Only (Locked) -->
+        <div class="viewer-header-logo-group" style="margin-bottom: 0;">
+            <button id="viewer-return-button" class="return-button">
+               <img id="viewer-logo" src="" alt="Collection Logo" class="collection-icon-small">
             </button>
-            <div class="subtitle">
-                  Cards in the Collection
-            </div>
         </div>
 
-        <div id="card-grid"
-             class="card-grid">
+        <!-- NEW CHASSIS START: Scroll layer opens here so subtitle scrolls up! -->
+        <div id="viewer-scroll-layer">
+            <div class="subtitle" style="margin-top: 10px; margin-bottom: 20px;">
+                  Cards in the Collection
+            </div>
+
+            <div id="card-grid" class="card-grid" style="margin-top: 0;"></div>
+            
+            <button id="reset-pokedex-button" class="reset-button">
+                Reset My Pokedex
+            </button>
         </div>
-        <button id="reset-pokedex-button"
-                class="reset-button">
-            Reset My Pokedex
-        </button>
     </div>
-    <!-- ==========================================
+
+
+
+	    <!-- ==========================================
          MY POKEDEX PAGE
-     ========================================== -->
+         ========================================== -->
     <div id="pokedex" class="pokedex hidden">
         <div class="overview-header">
             <button id="pokedex-return-button"
@@ -210,31 +201,42 @@
                 Pokédex
             </button>
         </div>
-        <div id="pokedex-grid" class="pokedex-grid"></div>
+        
+        <!-- NEW: Wrap the scrollable canvas layer here -->
+        <div id="pokedex-scroll-layer">
+            <div id="pokedex-grid" class="pokedex-grid"></div>
+        </div>
         <button id="pokedex-view-button" class="hidden"></button>
     </div>
 
-    <!-- ==========================================
-         CARD MODAL
-         ========================================== -->
-    <div id="card-modal"
-         class="card-modal hidden">
-        <div class="card-modal-content">
-            <button id="modal-close"
-                    class="modal-close-btn">
-                ✖
-            </button>
-            <img id="modal-image"
-                 alt="Pokemon Card">
-            <h3 id="modal-number"></h3>
-			<h3 id="modal-name"></h3>
-            <div id="modal-rarity"
-                 class="rarity-row">
-                <span id="modal-rarity-icon"></span>
-                <span id="modal-rarity-text"></span>
-            </div>
+
+<!-- ==========================================
+     CARD MODAL
+     ========================================== -->
+<div id="card-modal" class="card-modal hidden">
+    <div class="card-modal-content">
+        <div class="modal-close-bar">
+            <button id="modal-close" class="modal-close-btn">✖</button>
+        </div>
+        
+        <!-- Card Asset Body underneath -->
+        <div class="modal-card-body">
+            <img id="modal-image" src="" alt="Card Preview">
+            <div class="modal-metadata">
+               <!-- Row 1: Number and Name side-by-side -->
+               <div class="modal-title-line">
+                    <span id="modal-number"></span>
+                    <span id="modal-name"></span>
+               </div>
+               <!-- Row 2: Rarity Icon and Rarity Text side-by-side -->
+               <div class="modal-rarity-line">
+                    <span id="modal-rarity-icon"></span>
+                    <span id="modal-rarity-text"></span>
+                </div>
+             </div>
         </div>
     </div>
+</div>
 
     <!-- ==========================================
          JAVASCRIPT
