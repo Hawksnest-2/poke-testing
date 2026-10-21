@@ -77,7 +77,7 @@ const collectionSelector = document.getElementById("collection-selector");
 const myPokedexButtonHome = document.getElementById("home-pokedex-button");
 /* Collection Overview */
 const collectionOverview = document.getElementById("collection-overview");
-const overviewTitle = document.getElementById("overview-title");
+/*const overviewTitle = document.getElementById("overview-title"); <--commented out*/
 const overviewTotal = document.getElementById("overview-total");
 const overviewStatsTitle = document.getElementById("overview-stats-title");
 const overviewCatchTitle = document.getElementById("overview-catch-title");
@@ -96,7 +96,7 @@ const rarityUncommonText = document.getElementById("rarity-uncommon-text");
 const rarityRareText = document.getElementById("rarity-rare-text");
 /* Card Viewer */
 const cardViewer = document.getElementById("card-viewer");
-const collectionTitle = document.getElementById("collection-title");
+/*const collectionTitle = document.getElementById("collection-title");   <--commented out*/
 const viewerReturnButton = document.getElementById("viewer-return-button");
 const viewerHomeReturnButton = document.getElementById("viewer-home-return-button");
 const viewerPokedexButton = document.getElementById("viewer-pokedex-button");
@@ -235,7 +235,7 @@ async function enterCollectionOverview(collectionId) {
     currentCollectionData = await loadCollectionData(collectionId);
     showScreen("overview");
     const collectionMeta = collections.find(c => c.id === collectionId);
-    overviewTitle.textContent = collectionMeta ? collectionMeta.name : collectionId;
+/*    overviewTitle.textContent = collectionMeta ? collectionMeta.name : collectionId;  <--commented out*/
     document.getElementById("overview-logo").src = `./assets/logos/${collectionMeta.logo}`;
     const totalCards = currentCollectionData.length;
     let ownedCount = 0;
@@ -262,7 +262,7 @@ async function enterCollectionOverview(collectionId) {
         }
     });
     overviewStatsTitle.textContent = `Your ${collectionMeta.name} Collection Statistics`;
-    overviewCatchTitle.textContent = `Catch a Random ${collectionMeta.name} Pokémon!!!`;
+    overviewCatchTitle.textContent = `Catch a ${collectionMeta.name} Pokémon!!!`;
     overviewTotal.textContent = `Owned: ${ownedCount} / ${totalCards} cards`;
     rarityCommonIcon.textContent = rarityConfig.common.icon;
     rarityUncommonIcon.textContent = rarityConfig.uncommon.icon;
@@ -288,7 +288,7 @@ function renderCardViewer() {
     }
     showScreen("viewer");
     const collectionMeta = collections.find(c => c.id === currentCollectionId);
-    collectionTitle.textContent = collectionMeta ? collectionMeta.name : currentCollectionId;
+    /*collectionTitle.textContent = collectionMeta ? collectionMeta.name : currentCollectionId;  <--commented out*/
     document.getElementById("viewer-logo").src = `./assets/logos/${collectionMeta.logo}`;
     cardGrid.innerHTML = "";
     currentCollectionData.forEach(card => {
@@ -301,7 +301,7 @@ function renderCardViewer() {
         const imgSrc = isOwned ? `./collections/${currentCollectionId}/${card.file}` : `./assets/logos/cardback.jpg`;
         img.src = imgSrc;
         tile.appendChild(img);
-        const info = document.createElement("div");
+     /*   const info = document.createElement("div");
         info.className = "card-info";
         const num = document.createElement("div");
         num.className = "card-number";
@@ -315,7 +315,28 @@ function renderCardViewer() {
         info.appendChild(num);
         info.appendChild(name);
         info.appendChild(rarity);
+        tile.appendChild(info);*/
+        const info = document.createElement("div");
+        info.className = "card-info";
+        // Line 1: Rarity Icon - #123
+        const metaLine = document.createElement("div");
+        metaLine.className = "card-meta-line";
+        const rarityIcon = document.createElement("span");
+        rarityIcon.className = "card-rarity-icon";
+        rarityIcon.textContent = rarityLegend[card.rarity] || "";
+        const cardNumber = document.createElement("span");
+        cardNumber.className = "card-number";
+        cardNumber.textContent = ` - #${String(card.cardNumber).padStart(3, "0")}`;
+        metaLine.appendChild(rarityIcon);
+        metaLine.appendChild(cardNumber);
+        // Line 2: <Card Name>
+        const name = document.createElement("div");
+        name.className = "card-name";
+        name.textContent = card.name;
+        info.appendChild(metaLine);
+        info.appendChild(name);
         tile.appendChild(info);
+
         tile.addEventListener("click", () => {
             const isOwnedNow = ownedCards.get(key) === true;
             openCardModal(card, isOwnedNow);

@@ -82,6 +82,12 @@ HOME PAGE
   width: 100%;
 }
 
+#main-header .subtitle {
+  font-size: 1.8rem;        /* Shrinks the font size so it fits mobile screens */
+  max-width: 90%;           /* Prevents the text boundary from touching the screen edges */
+  margin: 0 auto;           /* Safely centers the text bounding box */
+}
+
 .main-title {
   display: flex;
   flex-direction: column;
@@ -105,24 +111,23 @@ HOME PAGE
 
 .title {
   text-align: center;
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   letter-spacing: 1px;
 }
 
 .subtitle {
   text-align: center;
   margin-top: 30px;
-  font-size: 2.8rem;
+  font-size: 1.2rem;
   color: #ccc;
 }
 
 .collection-selector {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+  margin: 30px auto 0 auto; /* Order: Top (30px), Right (auto), Bottom (0), Left (auto) */
 }
 
 .collection-tile {
@@ -179,7 +184,7 @@ COLLECTION OVERVIEW
 
 .overview-title {
   text-align: center;
-  font-size: 4rem;
+  font-size: 2.2rem;
   margin: 20px 0 10px;
 }
 
@@ -265,7 +270,7 @@ CATCH SECTION
   color: #ffffff;
   border: none;
   display: block;
-  width: 320px;
+  width: 250px;
   height: auto;
   cursor: pointer;
 }
@@ -356,8 +361,8 @@ CARD VIEWER
 
 .viewer-collection-title {
   text-align: center;
-  margin: 0 !important; /* Overrides default layout vertical margins */
-  font-size: 2.8rem;
+  margin: 10px 0;
+  font-size: 1.3rem;
   color: #ccc;
 }
 
@@ -515,7 +520,7 @@ MY POKEDEX
 
 .pokedex-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 24px;
   margin-top: 20px;
 }
