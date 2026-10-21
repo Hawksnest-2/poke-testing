@@ -180,7 +180,6 @@
 		<div id="collection-title"
 			class="subtitle viewer-collection-title">
         </div>
-	  </div>
         <div id="card-grid"
              class="card-grid">
         </div>
@@ -189,12 +188,13 @@
             Reset My Pokedex
         </button>
     </div>
-<!-- ==========================================
-        MY POKEDEX PAGE
- ========================================== -->
-<div id="pokedex"
-    class="pokedex hidden">
-		  <button id="pokedex-return-button"
+
+    <!-- ==========================================
+         MY POKEDEX PAGE
+         ========================================== -->
+    <!-- FIXED: Repaired broken formatting layout tags nesting your pokedex grid views -->
+    <div id="pokedex" class="pokedex hidden">
+        <button id="pokedex-return-button"
                 class="return-button">
 	   		<img
 	    		src="./assets/logos/Poke_Center.png"
@@ -203,18 +203,17 @@
             >
             Poké‑Center
         </button>
-  	<div>
-		<img
-            src="./assets/logos/pokedex.png"
-            alt="Pokedex"
-            class="pokedex-icon"
+        <div>
+		    <img
+                src="./assets/logos/pokedex.png"
+                alt="Pokedex"
+                class="pokedex-icon"
             >
             Pokedex
         </div>
-</div>
-        <div id="pokedex-grid"
-             class="pokedex-grid"></div>
-        </div>
+        <div id="pokedex-grid" class="pokedex-grid"></div>
+        <button id="pokedex-view-button" class="hidden"></button>
+    </div>
 	
     <!-- ==========================================
          CARD MODAL
@@ -232,7 +231,8 @@
 			<h3 id="modal-name"></h3>
             <div id="modal-rarity"
                  class="rarity-row">
-                <span id="modal-rarity-icon"> <id="modal-rarity-text"></span>
+                <span id="modal-rarity-icon"></span>
+                <span id="modal-rarity-text"></span>
             </div>
         </div>
     </div>
