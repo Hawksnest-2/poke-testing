@@ -340,6 +340,29 @@ CARD VIEWER
   opacity: .9;
 }
 
+.viewer-header-logo-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto;
+  width: 100%;
+}
+
+.viewer-header-logo-group .return-button {
+  padding: 0;
+  background: transparent;
+}
+
+.viewer-collection-title {
+  text-align: center;
+  margin: 0 !important; /* Overrides default layout vertical margins */
+  font-size: 2.8rem;
+  color: #ccc;
+}
+
+
 /*************************************************
 CARD MODAL
 *************************************************/
