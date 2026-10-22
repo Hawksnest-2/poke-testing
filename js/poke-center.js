@@ -356,9 +356,6 @@ async function enterCollectionOverview(collectionId) {
 /******************************************************************************
 CARD VIEWER
 ******************************************************************************/
-/******************************************************************************
-CARD VIEWER
-******************************************************************************/
 function renderCardViewer() {
     if (!currentCollectionData || !currentCollectionId) return;
     document.getElementById("viewer-scroll-layer").scrollTop = 0;
@@ -684,24 +681,70 @@ if (settingsDefaultFilter) {
 }
 
 /******************************************************************************
-PINCH ZOOM
+PINCH ZOOM & MULTI-TOUCH PANNING ENGINE
 ******************************************************************************/
 if (modalImage) {
+    // Phase 1: Touch Init Point Capture
+    modalImage.addEventListener("touchstart", e => {
+        if (e.touches.length === 1) {
+            // SINGLE TOUCH: Start panning drag vector tracking
+            isDragging = true;
+            startX = e.touches[0].pageX - currentX;
+            startY = e.touches[0].pageY - currentY;
+        } else if (e.touches.length === 2) {
+            // MULTI-TOUCH: Start scale calculation mode
+            isDragging = false;
+            const dx = e.touches[0].pageX - e.touches[1].pageX;
+            const dy = e.touches[0].pageY - e.touches[1].pageY;
+            startDistance = Math.sqrt(dx * dx + dy * dy);
+        }
+    });
+
+    // Phase 2: Live Motion Transform Engine
     modalImage.addEventListener("touchmove", e => {
-        if (e.touches.length === 2) {
+        // Prevent default browser viewport rubber-banding while zooming/panning
+        e.preventDefault(); 
+
+        if (e.touches.length === 1 && isDragging) {
+            // SINGLE TOUCH ACTION: Pan card image matching finger vector offsets
+            currentX = e.touches[0].pageX - startX;
+            currentY = e.touches[0].pageY - startY;
+            
+            // Constrain scrolling leak boundaries if user zooms back out to normal scale
+            if (scale <= 1) {
+                currentX = 0;
+                currentY = 0;
+            }
+            
+            modalImage.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
+        } else if (e.touches.length === 2) {
+            // MULTI-TOUCH ACTION: Calculate live pinch/spread zoom levels
             const [t1, t2] = e.touches;
             const dx = t1.pageX - t2.pageX;
             const dy = t1.pageY - t2.pageY;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            if (!startDistance) {
-                startDistance = distance;
-            }
+            
+            if (!startDistance) startDistance = distance;
+            
+            // Constrain zoom levels safely between 1x flat and 4x close-up magnification
             scale = Math.min(4, Math.max(1, distance / startDistance));
-            modalImage.style.transform = `scale(${scale})`;
+            
+            modalImage.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
         }
-    });
-    modalImage.addEventListener("touchend", () => {
+    }, { passive: false });
+
+    // Phase 3: Gesture End State Preservation
+    modalImage.addEventListener("touchend", e => {
         startDistance = 0;
+        isDragging = false;
+        
+        // If user zooms all the way back out, snap card position cleanly back to center layout
+        if (scale <= 1) {
+            scale = 1;
+            currentX = 0;
+            currentY = 0;
+            modalImage.style.transform = `translate(0px, 0px) scale(1)`;
+        }
     });
 }
 
@@ -715,9 +758,17 @@ showScreen("home");
 function closeCardModal() {
     if (cardModal) cardModal.classList.add("hidden");
     if (modalImage) modalImage.style.transform = "";
+    
+    // RESET ZOOM & DRAG VECTORS COMPLETELY ON CLOSE
     scale = 1;
     startDistance = 0;
+    currentX = 0;
+    currentY = 0;
+    startX = 0;
+    startY = 0;
+    isDragging = false;
     currentModalCard = null;
+    
     const catchStatus = document.getElementById("modal-catch-status");
     const collectCount = document.getElementById("modal-collection-count");
     if (catchStatus) catchStatus.textContent = "";

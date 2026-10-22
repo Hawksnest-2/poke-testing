@@ -463,7 +463,9 @@ CARD MODAL
   width: 340px;
   box-sizing: border-box;
   border: 4px solid transparent;
+  overflow: hidden; /* CRITICAL: Crops the overflowing card edge graphics inside the dialog card cleanly */
 }
+
 
 .rarity-common { border-color: #666; }
 .rarity-uncommon { border-color: #3fa9f5; }
