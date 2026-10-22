@@ -684,15 +684,14 @@ if (settingsDefaultFilter) {
 PINCH ZOOM & MULTI-TOUCH PANNING ENGINE
 ******************************************************************************/
 if (modalImage) {
-    // Phase 1: Touch Init Point Capture
     modalImage.addEventListener("touchstart", e => {
         if (e.touches.length === 1) {
-            // SINGLE TOUCH: Start panning drag vector tracking
+            // SINGLE TOUCH: Start panning vector tracking vectors mapping
             isDragging = true;
             startX = e.touches[0].pageX - currentX;
             startY = e.touches[0].pageY - currentY;
         } else if (e.touches.length === 2) {
-            // MULTI-TOUCH: Start scale calculation mode
+            // MULTI-TOUCH: Capture start positions of both fingers
             isDragging = false;
             const dx = e.touches[0].pageX - e.touches[1].pageX;
             const dy = e.touches[0].pageY - e.touches[1].pageY;
@@ -700,17 +699,16 @@ if (modalImage) {
         }
     });
 
-    // Phase 2: Live Motion Transform Engine
     modalImage.addEventListener("touchmove", e => {
-        // Prevent default browser viewport rubber-banding while zooming/panning
+        // Prevent default browser viewport rubber-banding while active
         e.preventDefault(); 
 
         if (e.touches.length === 1 && isDragging) {
-            // SINGLE TOUCH ACTION: Pan card image matching finger vector offsets
+            // SINGLE FINGER: Pan the image relative to finger drag vectors
             currentX = e.touches[0].pageX - startX;
             currentY = e.touches[0].pageY - startY;
             
-            // Constrain scrolling leak boundaries if user zooms back out to normal scale
+            // Constrain scrolling leak boundaries if user zooms back out
             if (scale <= 1) {
                 currentX = 0;
                 currentY = 0;
@@ -718,32 +716,37 @@ if (modalImage) {
             
             modalImage.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
         } else if (e.touches.length === 2) {
-            // MULTI-TOUCH ACTION: Calculate live pinch/spread zoom levels
-            const [t1, t2] = e.touches;
-            const dx = t1.pageX - t2.pageX;
-            const dy = t1.pageY - t2.pageY;
+            // TWO FINGERS: Calculate current pinch/spread scale modifications
+            const dx = e.touches[0].pageX - e.touches[1].pageX;
+            const dy = e.touches[0].pageY - e.touches[1].pageY;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
             if (!startDistance) startDistance = distance;
             
-            // Constrain zoom levels safely between 1x flat and 4x close-up magnification
+            // Constrain magnification boundaries safely between 1x and 4x close-up
             scale = Math.min(4, Math.max(1, distance / startDistance));
             
             modalImage.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
         }
     }, { passive: false });
 
-    // Phase 3: Gesture End State Preservation
     modalImage.addEventListener("touchend", e => {
         startDistance = 0;
-        isDragging = false;
         
-        // If user zooms all the way back out, snap card position cleanly back to center layout
-        if (scale <= 1) {
-            scale = 1;
-            currentX = 0;
-            currentY = 0;
-            modalImage.style.transform = `translate(0px, 0px) scale(1)`;
+        // Handle touch state transitions cleanly
+        if (e.touches.length === 1) {
+            isDragging = true;
+            startX = e.touches[0].pageX - currentX;
+            startY = e.touches[0].pageY - currentY;
+        } else if (e.touches.length === 0) {
+            isDragging = false;
+            // Snap back cleanly if fully zoomed out to flat layout boundaries
+            if (scale <= 1) {
+                scale = 1;
+                currentX = 0;
+                currentY = 0;
+                modalImage.style.transform = `translate(0px, 0px) scale(1)`;
+            }
         }
     });
 }
